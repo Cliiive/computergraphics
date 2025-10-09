@@ -1,13 +1,16 @@
-cmake_minimum_required (VERSION 3.10)
-project (computergraphics)
+cmake_minimum_required(VERSION 3.16)
+project(computergraphics LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_compile_options(-g -Wall -Wextra -Wpedantic -Wl,--stack,16777216)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
-include_directories(include)
+# Main executable
+add_executable(computergraphics src/main.cpp)
 
-add_executable(computergraphics test/math_test.cc src/math/math.cc)
-target_link_libraries(computergraphics gtest gtest_main)
+# Enable testing for CTest
+enable_testing()
 
+# Add the tests folder as a subdirectory
+add_subdirectory(tests)

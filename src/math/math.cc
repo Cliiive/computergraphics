@@ -1,4 +1,4 @@
-#include "math.h"
+#include <math.h>
 #include "math.tcc"
 
 // contains template instantiations for the 2-, 3- and 4-dimensional cases
