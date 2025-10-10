@@ -75,9 +75,7 @@ template <class FLOAT_TYPE, size_t N> struct Vector {
     FLOAT_TYPE length() const;
 
     // returns the square of the this Vector's length
-    /*
-  FLOAT_TYPE square_of_length() const;
-  */
+    FLOAT_TYPE square_of_length() const;
 
     // returns the scalar (inner) product of two Vectors
     /*

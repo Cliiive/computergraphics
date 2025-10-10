@@ -273,6 +273,27 @@ TEST(VECTOR, Length4df) {
     EXPECT_NEAR(sqrt(10), length, 0.00001);
 }
 
+TEST(VECTOR, SquareOfLength2df) {
+    Vector2df vector = {3.0, 4.0};
+    float     square = vector.square_of_length();
+
+    EXPECT_NEAR(25, square, 0.00001);
+}
+
+TEST(VECTOR, SquareOfLength3df) {
+    Vector3df vector = {0.0, -4.0, 3.0};
+    float     square = vector.square_of_length();
+
+    EXPECT_NEAR(25, square, 0.00001);
+}
+
+TEST(VECTOR, SquareOfLength4df) {
+    Vector4df vector = {1.0, 2.0, 2.0, 1.0};
+    float     square = vector.square_of_length();
+
+    EXPECT_NEAR(10, square, 0.00001);
+}
+
 /*
 TEST(VECTOR, ScalarVectorProduct1) {
   Vector2df vector1 = {1.0, 0.0};

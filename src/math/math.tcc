@@ -98,6 +98,11 @@ template <class FLOAT_TYPE, size_t N> FLOAT_TYPE Vector<FLOAT_TYPE, N>::length()
     return static_cast<FLOAT_TYPE>(sqrt(sum_of_squares));
 }
 
+template <class FLOAT_TYPE, size_t N> FLOAT_TYPE Vector<FLOAT_TYPE, N>::square_of_length() const {
+    const auto length = this->length();
+    return static_cast<FLOAT_TYPE>(length * length);
+}
+
 /*
 template <class FLOAT_TYPE, size_t N>  
 void Vector<FLOAT_TYPE, N>::normalize() {
