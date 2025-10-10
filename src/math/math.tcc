@@ -105,28 +105,25 @@ template <class FLOAT_TYPE, size_t N> FLOAT_TYPE Vector<FLOAT_TYPE, N>::square_o
 
 template <class FLOAT_TYPE, size_t N>
 FLOAT_TYPE operator*(Vector<FLOAT_TYPE, N> vector1, const Vector<FLOAT_TYPE, N> vector2) {
-    FLOAT_TYPE scalar_product = static_cast<FLOAT_TYPE>(0.0);
+    FLOAT_TYPE scalar_product = 0.0;
     for (size_t i = 0u; i < N; i++) {
         scalar_product += vector1[i] * vector2[i];
     }
-    return scalar_product;
+    return static_cast<FLOAT_TYPE>(scalar_product);
 }
 
-/*
-template <class FLOAT_TYPE, size_t N>  
-void Vector<FLOAT_TYPE, N>::normalize() {
-  *this /= length(); //  +/- INFINITY if length is (near to) zero
+template <class FLOAT_TYPE, size_t N> void Vector<FLOAT_TYPE, N>::normalize() {
+    *this /= length();  //  +/- INFINITY if length is (near to) zero
 }
 
-template <class FLOAT_TYPE, size_t N>  
+template <class FLOAT_TYPE, size_t N>
 Vector<FLOAT_TYPE, N> Vector<FLOAT_TYPE, N>::get_reflective(Vector<FLOAT_TYPE, N> normal) const {
-  assert(0.99999 < normal.square_of_length() && normal.square_of_length()  < 1.000001); 
-  return *this - static_cast<FLOAT_TYPE>(2.0) * (*this * normal ) * normal;
+    assert(0.99999 < normal.square_of_length() && normal.square_of_length() < 1.000001);
+    return *this - static_cast<FLOAT_TYPE>(2.0) * (*this * normal) * normal;
 }
 
 template <class FLOAT_TYPE, size_t N>
 FLOAT_TYPE Vector<FLOAT_TYPE, N>::angle(size_t axis_1, size_t axis_2) const {
-  Vector<FLOAT_TYPE, N> normalized = (1.0f / length()) * *this;
-  return atan2( normalized[axis_2], normalized[axis_1] );
+    Vector<FLOAT_TYPE, N> normalized = (1.0f / length()) * *this;
+    return atan2(normalized[axis_2], normalized[axis_1]);
 }
-*/

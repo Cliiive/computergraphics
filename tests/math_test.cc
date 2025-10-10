@@ -79,110 +79,108 @@ TEST(VECTOR, CopyConstructor) {
     EXPECT_NEAR(0.0, copy[1], 0.00001);
 }
 
-/*
 TEST(VECTOR, SquareOfLength1) {
-  Vector2df vector = {2.0, 2.0};
-  
-  EXPECT_NEAR(8.0, vector.square_of_length(), 0.00001);
+    Vector2df vector = {2.0, 2.0};
+
+    EXPECT_NEAR(8.0, vector.square_of_length(), 0.00001);
 }
 
 TEST(VECTOR, SquareOfLength3df) {
-  Vector3df vector = {4.0, 0.0, 3.0};
-  
-  EXPECT_NEAR(25.0, vector.square_of_length(), 0.00001);
+    Vector3df vector = {4.0, 0.0, 3.0};
+
+    EXPECT_NEAR(25.0, vector.square_of_length(), 0.00001);
 }
 
 TEST(VECTOR, Length) {
-  Vector2df vector = {-3.0, 4.0};
-  
-  EXPECT_NEAR(5.0, vector.length(), 0.00001);
+    Vector2df vector = {-3.0, 4.0};
+
+    EXPECT_NEAR(5.0, vector.length(), 0.00001);
 }
 
 TEST(VECTOR, Length3df) {
-  Vector3df vector = {0.0, -4.0, 3.0};
-  float length = vector.length();
-    
-  EXPECT_NEAR(5.0, length, 0.00001);
+    Vector3df vector = {0.0, -4.0, 3.0};
+    float     length = vector.length();
+
+    EXPECT_NEAR(5.0, length, 0.00001);
 }
 
 TEST(VECTOR, Normalize) {
-  Vector2df vector = {-3.0, 4.0};
-  
-  vector.normalize();
-  EXPECT_NEAR(1.0, vector.length(), 0.00001);
+    Vector2df vector = {-3.0, 4.0};
+
+    vector.normalize();
+    EXPECT_NEAR(1.0, vector.length(), 0.00001);
 }
 
 TEST(VECTOR, Normalize3df) {
-  Vector3df vector = {-3.0, 4.0, 7.8};
-  
-  vector.normalize();
-  EXPECT_NEAR(1.0, vector.length(), 0.00001);
+    Vector3df vector = {-3.0, 4.0, 7.8};
+
+    vector.normalize();
+    EXPECT_NEAR(1.0, vector.length(), 0.00001);
 }
 
 TEST(VECTOR, Normalize4df) {
-  Vector4df vector = {-3.5, 7.5, 0.001, 4.0};
-  
-  vector.normalize();
-  EXPECT_NEAR(1.0, vector.length(), 0.00001);
+    Vector4df vector = {-3.5, 7.5, 0.001, 4.0};
+
+    vector.normalize();
+    EXPECT_NEAR(1.0, vector.length(), 0.00001);
 }
 
 TEST(VECTOR, GetReflective1) {
-  Vector2df vector = {1.0, -1.0};
-  Vector2df normal = {0.0, 1.0};
-  
-  Vector2df reflectiv = vector.get_reflective(normal);
-  
-  EXPECT_NEAR(1.0, reflectiv[0], 0.00001);
-  EXPECT_NEAR(1.0, reflectiv[1], 0.00001);
+    Vector2df vector = {1.0, -1.0};
+    Vector2df normal = {0.0, 1.0};
+
+    Vector2df reflectiv = vector.get_reflective(normal);
+
+    EXPECT_NEAR(1.0, reflectiv[0], 0.00001);
+    EXPECT_NEAR(1.0, reflectiv[1], 0.00001);
 }
 
 TEST(VECTOR, GetReflective2) {
-  Vector2df vector = {0.0, -1.0};
-  Vector2df normal = {1.0, 1.0};
-  
-  normal.normalize();
-  
-  Vector2df reflectiv = vector.get_reflective(normal);
-  
-  EXPECT_NEAR(1.0, reflectiv[0], 0.00001);
-  EXPECT_NEAR(0.0, reflectiv[1], 0.00001);
+    Vector2df vector = {0.0, -1.0};
+    Vector2df normal = {1.0, 1.0};
+
+    normal.normalize();
+
+    Vector2df reflectiv = vector.get_reflective(normal);
+
+    EXPECT_NEAR(1.0, reflectiv[0], 0.00001);
+    EXPECT_NEAR(0.0, reflectiv[1], 0.00001);
 }
 
 TEST(VECTOR, GetReflective3df_1) {
-  Vector3df vector = {0.0, 1.0, -1.0};
-  Vector3df normal = {0.0, 0.0, 1.0};
-  
-  Vector3df reflectiv = vector.get_reflective(normal);
-  
-  EXPECT_NEAR(0.0, reflectiv[0], 0.00001);
-  EXPECT_NEAR(1.0, reflectiv[1], 0.00001);
-  EXPECT_NEAR(1.0, reflectiv[2], 0.00001);
+    Vector3df vector = {0.0, 1.0, -1.0};
+    Vector3df normal = {0.0, 0.0, 1.0};
+
+    Vector3df reflectiv = vector.get_reflective(normal);
+
+    EXPECT_NEAR(0.0, reflectiv[0], 0.00001);
+    EXPECT_NEAR(1.0, reflectiv[1], 0.00001);
+    EXPECT_NEAR(1.0, reflectiv[2], 0.00001);
 }
 
 TEST(VECTOR, Angle90) {
-  Vector2df vector{ 0.0f, 1.0f};
-  
-  EXPECT_NEAR(PI / 2.0f, vector.angle(0,1), 0.00001);
+    Vector2df vector{0.0f, 1.0f};
+
+    EXPECT_NEAR(PI / 2.0f, vector.angle(0, 1), 0.00001);
 }
 
 TEST(VECTOR, Angle180) {
-  Vector2df vector{ -1.0f, 0.0f};
-  
-  EXPECT_NEAR(PI, vector.angle(0,1), 0.00001);
+    Vector2df vector{-1.0f, 0.0f};
+
+    EXPECT_NEAR(PI, vector.angle(0, 1), 0.00001);
 }
 
 TEST(VECTOR, Angle270) {
-  Vector2df vector{ 0.0f, -1.0f};
-  
-  EXPECT_NEAR(-PI / 2.0f, vector.angle(0,1), 0.00001);
+    Vector2df vector{0.0f, -1.0f};
+
+    EXPECT_NEAR(-PI / 2.0f, vector.angle(0, 1), 0.00001);
 }
 
 TEST(VECTOR, Angle0) {
-  Vector2df vector(0.0f);
-  
-  EXPECT_NEAR(0.0f, vector.angle(0,1), 0.00001);
+    Vector2df vector(0.0f);
+
+    EXPECT_NEAR(0.0f, vector.angle(0, 1), 0.00001);
 }
-*/
 
 TEST(VECTOR, SumsTwoVectors) {
     Vector2df vector = {1.0, 0.0};
@@ -259,13 +257,6 @@ TEST(VECTOR, Length2df) {
     EXPECT_NEAR(5.0, length, 0.00001);
 }
 
-TEST(VECTOR, Length3df) {
-    Vector3df vector = {0.0, -4.0, 3.0};
-    float     length = vector.length();
-
-    EXPECT_NEAR(5.0, length, 0.00001);
-}
-
 TEST(VECTOR, Length4df) {
     Vector4df vector = {1.0, 2.0, 2.0, 1.0};
     float     length = vector.length();
@@ -289,13 +280,6 @@ TEST(VECTOR, NegativeVectorLength3df) {
 
 TEST(VECTOR, SquareOfLength2df) {
     Vector2df vector = {3.0, 4.0};
-    float     square = vector.square_of_length();
-
-    EXPECT_NEAR(25, square, 0.00001);
-}
-
-TEST(VECTOR, SquareOfLength3df) {
-    Vector3df vector = {0.0, -4.0, 3.0};
     float     square = vector.square_of_length();
 
     EXPECT_NEAR(25, square, 0.00001);
