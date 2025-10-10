@@ -8,11 +8,21 @@ enable_testing()
 
 add_compile_options(-g -Wall -Wextra -Wpedantic -Wl,--stack,16777216)
 
-# Add the math implementation to make sure the template code is available
-add_executable(tests math_test.cc ${CMAKE_SOURCE_DIR}/src/math/math.cc)
-target_link_libraries(tests gtest gtest_main)
+# Create separate test executables
+# Math tests
+add_executable(math_tests math_test.cc ${CMAKE_SOURCE_DIR}/src/math/math.cc)
+target_link_libraries(math_tests gtest gtest_main)
+target_include_directories(math_tests PRIVATE ${CMAKE_SOURCE_DIR}/src)
+add_test(NAME math_tests COMMAND math_tests)
 
-# Make sure the test can find the implementation files
-target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/src)
+# Geometry tests
+add_executable(geometry_tests geometry_test.cc ${CMAKE_SOURCE_DIR}/src/geometry/geometry.cc ${CMAKE_SOURCE_DIR}/src/math/math.cc)
+target_link_libraries(geometry_tests gtest gtest_main)
+target_include_directories(geometry_tests PRIVATE ${CMAKE_SOURCE_DIR}/src)
+add_test(NAME geometry_tests COMMAND geometry_tests)
 
-add_test(NAME tests COMMAND tests)
+# All tests combined
+add_executable(all_tests math_test.cc geometry_test.cc ${CMAKE_SOURCE_DIR}/src/math/math.cc ${CMAKE_SOURCE_DIR}/src/geometry/geometry.cc)
+target_link_libraries(all_tests gtest gtest_main)
+target_include_directories(all_tests PRIVATE ${CMAKE_SOURCE_DIR}/src)
+add_test(NAME all_tests COMMAND all_tests)
