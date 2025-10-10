@@ -148,6 +148,46 @@ TEST(SPHERE, Intersects2dfWithSphere_2) {
     EXPECT_FALSE(sphere1.intersects(sphere2));
 }
 
+TEST(SPHERE, Inside2df_1) {
+    Sphere2df sphere = {{0.0, 0.0}, 1.0};
+    Vector2df p1     = {0.5, 0.5};
+    Vector2df p2     = {1.0, 0.0};
+    Vector2df p3     = {1.5, 0.0};
+
+    EXPECT_TRUE(sphere.inside(p1));
+    EXPECT_TRUE(sphere.inside(p2));
+    EXPECT_FALSE(sphere.inside(p3));
+}
+
+TEST(SPHERE, Inside2df_2) {
+    Sphere2df sphere = {{1.0, 1.0}, 2.0};
+    Vector2df p1     = {2.1, 2.0};
+    Vector2df p2     = {3.0, 1.0};
+    Vector2df p3     = {3.5, 1.0};
+
+    EXPECT_TRUE(sphere.inside(p1));
+    EXPECT_TRUE(sphere.inside(p2));
+    EXPECT_FALSE(sphere.inside(p3));
+}
+
+TEST(SPHERE, Inside2df_3) {
+    Sphere2df sphere = {{1.0, 1.0}, 2.0};
+    Vector2df p1     = {1.0, 0.0};  // on the surface
+
+    EXPECT_TRUE(sphere.inside(p1));
+}
+
+TEST(SPHERE, Inside2df_4) {
+    Sphere2df sphere = {{-1.0, -1.0}, 2.0};
+    Vector2df p1     = {-1.0, 0.0};
+    Vector2df p2     = {0.5, -1.5};
+    Vector2df p3     = {1.5, -1.5};
+
+    EXPECT_TRUE(sphere.inside(p1));
+    EXPECT_TRUE(sphere.inside(p2));
+    EXPECT_FALSE(sphere.inside(p3));
+}
+
 /*
 TEST(SPHERE, Intersects2dfWithRay_1) {
   Sphere2df sphere = { {0.0, 0.0}, 1.0 };

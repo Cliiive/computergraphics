@@ -91,9 +91,7 @@ template <class FLOAT, size_t N> class Sphere {
     bool intersects(Sphere<FLOAT, N> sphere) const;
 
     // returns true iff the given point is inside this Sphere or on its surface
-    /*
-  bool inside(const Vector<FLOAT, N> p) const;
-  */
+    bool inside(const Vector<FLOAT, N> p) const;
 };
 
 template <class FLOAT, size_t N> class Triangle {

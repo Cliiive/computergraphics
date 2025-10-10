@@ -76,6 +76,11 @@ template <class FLOAT, size_t N> bool Sphere<FLOAT, N>::intersects(Sphere<FLOAT,
     return distance_squared <= radius_sum * radius_sum;
 }
 
+template <class FLOAT, size_t N> bool Sphere<FLOAT, N>::inside(const Vector<FLOAT, N> p) const {
+    FLOAT distance_squared = (center - p).square_of_length();
+    return distance_squared <= radius * radius;
+}
+
 template <class FLOAT, size_t N>
 Sphere<FLOAT, N>::Sphere(Vector<FLOAT, N> center, FLOAT radius) : center(center), radius(radius) {}
 
