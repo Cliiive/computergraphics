@@ -148,6 +148,119 @@ TEST(SPHERE, Intersects2dfWithSphere_2) {
     EXPECT_FALSE(sphere1.intersects(sphere2));
 }
 
+TEST(SPHERE, Intersects2dfWithRay_1) {
+    Sphere2df sphere = {{0.0, 0.0}, 1.0};
+    Ray2df    ray{{-2.0, -3.0}, {1.0, 1.0}};
+    EXPECT_NEAR(2.0, sphere.intersects(ray), 0.000001);
+}
+
+TEST(SPHERE, Intersects2dfWithRay_2) {
+    Sphere2df sphere = {{0.0, 0.0}, 1.0};
+    Ray2df    ray{{-3.0, 1.0}, {1.0, 0.0}};
+    EXPECT_NEAR(3.0, sphere.intersects(ray), 0.000001);
+}
+
+TEST(SPHERE, Intersects2dfWithRay_3) {
+    Sphere2df sphere = {{1.0, 1.0}, 1.0};
+    Ray2df    ray{{4.0, 1.0}, {-1.0, 0.0}};
+    EXPECT_NEAR(2.0, sphere.intersects(ray), 0.000001);
+}
+
+TEST(SPHERE, Intersects3dfWithRay_1) {
+    Sphere3df sphere = {{0.0, 0.0, 0.0}, 1.0};
+    Ray3df    ray{{-2.0, -3.0, 0.0}, {1.0, 1.0, 0.0}};
+    EXPECT_NEAR(2.0, sphere.intersects(ray), 0.000001);
+}
+
+TEST(SPHERE, Intersects3dfWithRay_2) {
+    Sphere3df                       sphere = {{0.0, 0.0, 0.0}, 1.0};
+    Ray3df                          ray{{-2.0, -3.0, 0.0}, {1.0, 1.0, 0.0}};
+    Intersection_Context<float, 3u> context;
+
+    EXPECT_TRUE(sphere.intersects(ray, context));
+    EXPECT_NEAR(2.0, context.t, 0.000001);
+    EXPECT_NEAR(0.0, context.intersection[0], 0.000001);
+    EXPECT_NEAR(-1.0, context.intersection[1], 0.000001);
+    EXPECT_NEAR(0.0, context.intersection[2], 0.000001);
+    EXPECT_NEAR(0.0, context.normal[0], 0.000001);
+    EXPECT_NEAR(-1.0, context.normal[1], 0.000001);
+    EXPECT_NEAR(0.0, context.normal[2], 0.000001);
+}
+
+TEST(SPHERE, Intersects3dfWithRay_3) {
+    Sphere3df                       sphere = {{1.0, 0.0, 0.0}, 1.0};
+    Ray3df                          ray{{-1.0, -3.0, 0.0}, {1.0, 1.0, 0.0}};
+    Intersection_Context<float, 3u> context;
+
+    EXPECT_TRUE(sphere.intersects(ray, context));
+    EXPECT_NEAR(2.0, context.t, 0.000001);
+    EXPECT_NEAR(1.0, context.intersection[0], 0.000001);
+    EXPECT_NEAR(-1.0, context.intersection[1], 0.000001);
+    EXPECT_NEAR(0.0, context.intersection[2], 0.000001);
+    EXPECT_NEAR(0.0, context.normal[0], 0.000001);
+    EXPECT_NEAR(-1.0, context.normal[1], 0.000001);
+    EXPECT_NEAR(0.0, context.normal[2], 0.000001);
+}
+
+TEST(SPHERE, Intersects3dfWithRay_4) {
+    Sphere3df                       sphere = {{1.0, 0.0, 0.0}, 0.5};
+    Ray3df                          ray{{1.0, 3.0, 0.0}, {0.0, -1.0, 0.0}};
+    Intersection_Context<float, 3u> context;
+
+    EXPECT_TRUE(sphere.intersects(ray, context));
+    EXPECT_NEAR(2.5, context.t, 0.000001);
+    EXPECT_NEAR(1.0, context.intersection[0], 0.000001);
+    EXPECT_NEAR(0.5, context.intersection[1], 0.000001);
+    EXPECT_NEAR(0.0, context.intersection[2], 0.000001);
+    EXPECT_NEAR(0.0, context.normal[0], 0.000001);
+    EXPECT_NEAR(1.0, context.normal[1], 0.000001);
+    EXPECT_NEAR(0.0, context.normal[2], 0.000001);
+}
+
+TEST(SPHERE, Intersects3dfWithRay_5) {
+    Sphere3df                       sphere = {{2.0, 0.0, 2.0}, 1.5};
+    Ray3df                          ray{{3.5, 0.0, -0.5}, {0.0, 0.0, 1.0}};
+    Intersection_Context<float, 3u> context;
+
+    EXPECT_TRUE(sphere.intersects(ray, context));
+    EXPECT_NEAR(2.5, context.t, 0.000001);
+    EXPECT_NEAR(3.5, context.intersection[0], 0.000001);
+    EXPECT_NEAR(0.0, context.intersection[1], 0.000001);
+    EXPECT_NEAR(2.0, context.intersection[2], 0.000001);
+    EXPECT_NEAR(1.0, context.normal[0], 0.000001);
+    EXPECT_NEAR(0.0, context.normal[1], 0.000001);
+    EXPECT_NEAR(0.0, context.normal[2], 0.000001);
+}
+
+TEST(SPHERE, Intersects3dfWithRay_6) {
+    Sphere3df                       sphere = {{-15.0f, 0.0f, 2.0f}, 10.0f};
+    Ray3df                          ray{{0.0f, 0.0f, 20.0f}, {0.0f, 0.0f, -15.0f}};
+    Intersection_Context<float, 3u> context;
+
+    EXPECT_FALSE(sphere.intersects(ray, context));
+}
+
+TEST(SPHERE, Intersects3dfWithRay_7) {
+    // ray starts inside sphere
+    Sphere3df                       sphere = {{3.0f, 3.0f, 0.0f}, 3.0f};
+    Ray3df                          ray{{3.5f, 3.0f, 0.0f}, {1.0f, 0.0f, 0.0f}};
+    Intersection_Context<float, 3u> context;
+
+    EXPECT_TRUE(sphere.intersects(ray, context));
+}
+
+TEST(SPHERE, Inside_1) {
+    Sphere3df sphere = {{3.0f, 3.0f, 0.0f}, 3.0f};
+
+    EXPECT_TRUE(sphere.inside(Vector3df{3.5f, 3.0f, 0.0f}));
+}
+
+TEST(SPHERE, NotInside_1) {
+    Sphere3df sphere = {{3.0f, 3.0f, 0.0f}, 3.0f};
+
+    EXPECT_FALSE(sphere.inside(Vector3df{-0.5f, 0.0f, 0.0f}));
+}
+
 TEST(SPHERE, Inside2df_1) {
     Sphere2df sphere = {{0.0, 0.0}, 1.0};
     Vector2df p1     = {0.5, 0.5};
@@ -188,123 +301,6 @@ TEST(SPHERE, Inside2df_4) {
     EXPECT_FALSE(sphere.inside(p3));
 }
 
-/*
-TEST(SPHERE, Intersects2dfWithRay_1) {
-  Sphere2df sphere = { {0.0, 0.0}, 1.0 };
-  Ray2df ray{ {-2.0, -3.0}, {1.0, 1.0} };
-  EXPECT_NEAR(2.0, sphere.intersects(ray), 0.000001 );
-}
-
-TEST(SPHERE, Intersects2dfWithRay_2) {
-  Sphere2df sphere = { {0.0, 0.0}, 1.0 };
-  Ray2df ray{ {-3.0, 1.0}, {1.0, 0.0} };
-  EXPECT_NEAR(3.0, sphere.intersects(ray), 0.000001 );
-}
-
-TEST(SPHERE, Intersects2dfWithRay_3) {
-  Sphere2df sphere = { {1.0, 1.0}, 1.0 };
-  Ray2df ray{ {4.0, 1.0}, {-1.0, 0.0} };
-  EXPECT_NEAR(2.0, sphere.intersects(ray), 0.000001 );
-}
-
-TEST(SPHERE, Intersects3dfWithRay_1) {
-  Sphere3df sphere = { {0.0, 0.0, 0.0}, 1.0 };
-  Ray3df ray{ {-2.0, -3.0, 0.0}, {1.0, 1.0, 0.0} };
-  EXPECT_NEAR(2.0, sphere.intersects(ray), 0.000001 );
-}
-
-TEST(SPHERE, Intersects3dfWithRay_2) {
-  Sphere3df sphere = { {0.0, 0.0, 0.0}, 1.0 };
-  Ray3df ray{ {-2.0, -3.0, 0.0}, {1.0, 1.0, 0.0} };
-  Intersection_Context<float,3u> context;
-  
-  EXPECT_TRUE( sphere.intersects(ray, context) );
-  EXPECT_NEAR( 2.0, context.t, 0.000001 );
-  EXPECT_NEAR( 0.0, context.intersection[0], 0.000001 );
-  EXPECT_NEAR(-1.0, context.intersection[1], 0.000001 );
-  EXPECT_NEAR( 0.0, context.intersection[2], 0.000001 );
-  EXPECT_NEAR( 0.0, context.normal[0], 0.000001 );
-  EXPECT_NEAR(-1.0, context.normal[1], 0.000001 );
-  EXPECT_NEAR( 0.0, context.normal[2], 0.000001 );  
-}
-
-TEST(SPHERE, Intersects3dfWithRay_3) {
-  Sphere3df sphere = { {1.0, 0.0, 0.0}, 1.0 };
-  Ray3df ray{ {-1.0, -3.0, 0.0}, {1.0, 1.0, 0.0} };
-  Intersection_Context<float,3u> context;
-  
-  EXPECT_TRUE( sphere.intersects(ray, context) );
-  EXPECT_NEAR( 2.0, context.t, 0.000001 );
-  EXPECT_NEAR( 1.0, context.intersection[0], 0.000001 );
-  EXPECT_NEAR(-1.0, context.intersection[1], 0.000001 );
-  EXPECT_NEAR( 0.0, context.intersection[2], 0.000001 );
-  EXPECT_NEAR( 0.0, context.normal[0], 0.000001 );
-  EXPECT_NEAR(-1.0, context.normal[1], 0.000001 );
-  EXPECT_NEAR( 0.0, context.normal[2], 0.000001 );  
-}
-
-TEST(SPHERE, Intersects3dfWithRay_4) {
-  Sphere3df sphere = { {1.0, 0.0, 0.0}, 0.5 };
-  Ray3df ray{ {1.0, 3.0, 0.0}, {0.0, -1.0, 0.0} };
-  Intersection_Context<float,3u> context;
-  
-  EXPECT_TRUE( sphere.intersects(ray, context) );
-  EXPECT_NEAR( 2.5, context.t, 0.000001 );
-  EXPECT_NEAR( 1.0, context.intersection[0], 0.000001 );
-  EXPECT_NEAR( 0.5, context.intersection[1], 0.000001 );
-  EXPECT_NEAR( 0.0, context.intersection[2], 0.000001 );
-  EXPECT_NEAR( 0.0, context.normal[0], 0.000001 );
-  EXPECT_NEAR( 1.0, context.normal[1], 0.000001 );
-  EXPECT_NEAR( 0.0, context.normal[2], 0.000001 );  
-}
-
-TEST(SPHERE, Intersects3dfWithRay_5) {
-  Sphere3df sphere = { {2.0, 0.0, 2.0}, 1.5 };
-  Ray3df ray{ {3.5, 0.0, -0.5}, {0.0, 0.0, 1.0} };
-  Intersection_Context<float,3u> context;
-  
-  EXPECT_TRUE( sphere.intersects(ray, context) );
-  EXPECT_NEAR( 2.5, context.t, 0.000001 );
-  EXPECT_NEAR( 3.5, context.intersection[0], 0.000001 );
-  EXPECT_NEAR( 0.0, context.intersection[1], 0.000001 );
-  EXPECT_NEAR( 2.0, context.intersection[2], 0.000001 );
-  EXPECT_NEAR( 1.0, context.normal[0], 0.000001 );
-  EXPECT_NEAR( 0.0, context.normal[1], 0.000001 );
-  EXPECT_NEAR( 0.0, context.normal[2], 0.000001 );  
-}
-
-TEST(SPHERE, Intersects3dfWithRay_6) {
-  Sphere3df sphere = { {-15.0f, 0.0f, 2.0f}, 10.0f };
-  Ray3df ray{ {0.0f, 0.0f, 20.0f}, {0.0f, 0.0f, -15.0f} };
-  Intersection_Context<float,3u> context;
-  
-  EXPECT_FALSE( sphere.intersects(ray, context) );
-}
-
-TEST(SPHERE, Intersects3dfWithRay_7) {
-  // ray starts inside sphere
-  Sphere3df sphere = { {3.0f, 3.0f, 0.0f}, 3.0f };
-  Ray3df ray{ {3.5f, 3.0f, 0.0f}, {1.0f, 0.0f, 0.0f} };
-  Intersection_Context<float,3u> context;
-  
-  EXPECT_TRUE( sphere.intersects(ray, context) );
-}
-
-*/
-
-/*
-TEST(SPHERE, Inside_1) {
-  Sphere3df sphere = { {3.0f, 3.0f, 0.0f}, 3.0f };
-  
-  EXPECT_TRUE( sphere.inside( Vector3df{3.5f, 3.0f, 0.0f}) );
-}
-
-TEST(SPHERE, NotInside_1) {
-  Sphere3df sphere = { {3.0f, 3.0f, 0.0f}, 3.0f };
-  
-  EXPECT_FALSE( sphere.inside( Vector3df{-0.5f, 0.0f, 0.0f}) );
-}
-*/
 TEST(TRIANGLE, Intersects3dfWithRay_1) {
     Triangle3df                     triangle = {{0.0, 0.0, 0.0}, {0.0, 3.0, 0.0}, {3.0, 0.0, 0.0}};
     Ray3df                          ray{{0.0, 0.0, 2.0}, {0.0, 0.0, -1.0}};
