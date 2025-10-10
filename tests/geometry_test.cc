@@ -134,6 +134,7 @@ TEST(AABB, SweepIntersects2df_5) {
     EXPECT_NEAR(0.0, normal[1], 0.00001);
 }
 
+// Hook
 TEST(SPHERE, Intersects2dfWithSphere_1) {
     Sphere2df sphere1 = {{0.0, 0.0}, 1.0};
     Sphere2df sphere2 = {{1.0, 1.0}, 0.5};
@@ -145,6 +146,14 @@ TEST(SPHERE, Intersects2dfWithSphere_2) {
     Sphere2df sphere1 = {{0.0, 0.0}, 1.0};
     Sphere2df sphere2 = {{2.0, 2.0}, 0.5};
 
+    EXPECT_FALSE(sphere1.intersects(sphere2));
+}
+
+TEST(SPHERE, Intersects2dfWithSphere_3) {
+    Sphere2df sphere1 = {{0.0, 0.0}, 1.0};
+    Sphere2df sphere2 = {{2.0, 0.0}, 1.0};
+
+    // Only touching spheres should return false
     EXPECT_FALSE(sphere1.intersects(sphere2));
 }
 
@@ -261,6 +270,7 @@ TEST(SPHERE, NotInside_1) {
     EXPECT_FALSE(sphere.inside(Vector3df{-0.5f, 0.0f, 0.0f}));
 }
 
+// Hook
 TEST(SPHERE, Inside2df_1) {
     Sphere2df sphere = {{0.0, 0.0}, 1.0};
     Vector2df p1     = {0.5, 0.5};
