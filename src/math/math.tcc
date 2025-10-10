@@ -103,6 +103,15 @@ template <class FLOAT_TYPE, size_t N> FLOAT_TYPE Vector<FLOAT_TYPE, N>::square_o
     return static_cast<FLOAT_TYPE>(length * length);
 }
 
+template <class FLOAT_TYPE, size_t N>
+FLOAT_TYPE operator*(Vector<FLOAT_TYPE, N> vector1, const Vector<FLOAT_TYPE, N> vector2) {
+    FLOAT_TYPE scalar_product = static_cast<FLOAT_TYPE>(0.0);
+    for (size_t i = 0u; i < N; i++) {
+        scalar_product += vector1[i] * vector2[i];
+    }
+    return scalar_product;
+}
+
 /*
 template <class FLOAT_TYPE, size_t N>  
 void Vector<FLOAT_TYPE, N>::normalize() {
