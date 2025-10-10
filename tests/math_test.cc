@@ -252,6 +252,27 @@ TEST(VECTOR, ScalarAssignmentDivision) {
     EXPECT_NEAR(0.0, vector1[1], 0.00001);
 }
 
+TEST(VECTOR, Length2df) {
+    Vector2df vector = {3.0, 4.0};
+    float     length = vector.length();
+
+    EXPECT_NEAR(5.0, length, 0.00001);
+}
+
+TEST(VECTOR, Length3df) {
+    Vector3df vector = {0.0, -4.0, 3.0};
+    float     length = vector.length();
+
+    EXPECT_NEAR(5.0, length, 0.00001);
+}
+
+TEST(VECTOR, Length4df) {
+    Vector4df vector = {1.0, 2.0, 2.0, 1.0};
+    float     length = vector.length();
+
+    EXPECT_NEAR(sqrt(10), length, 0.00001);
+}
+
 /*
 TEST(VECTOR, ScalarVectorProduct1) {
   Vector2df vector1 = {1.0, 0.0};
