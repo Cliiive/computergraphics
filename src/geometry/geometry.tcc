@@ -70,6 +70,12 @@ AxisAlignedBoundingBox<FLOAT, N>::sweep_intersects(AxisAlignedBoundingBox<FLOAT,
     return normal;
 }
 
+template <class FLOAT, size_t N> bool Sphere<FLOAT, N>::intersects(Sphere<FLOAT, N> sphere) const {
+    FLOAT distance_squared = (center - sphere.center).square_of_length();
+    FLOAT radius_sum       = radius + sphere.radius;
+    return distance_squared <= radius_sum * radius_sum;
+}
+
 template <class FLOAT, size_t N>
 Sphere<FLOAT, N>::Sphere(Vector<FLOAT, N> center, FLOAT radius) : center(center), radius(radius) {}
 

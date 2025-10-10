@@ -91,16 +91,15 @@ Vector<FLOAT_TYPE, 3u> Vector<FLOAT_TYPE, N>::cross_product(const Vector<FLOAT_T
 }
 
 template <class FLOAT_TYPE, size_t N> FLOAT_TYPE Vector<FLOAT_TYPE, N>::length() const {
+    return static_cast<FLOAT_TYPE>(sqrt(this->square_of_length()));
+}
+
+template <class FLOAT_TYPE, size_t N> FLOAT_TYPE Vector<FLOAT_TYPE, N>::square_of_length() const {
     FLOAT_TYPE sum_of_squares = static_cast<FLOAT_TYPE>(0.0);
     for (size_t i = 0u; i < N; i++) {
         sum_of_squares += vector[i] * vector[i];
     }
-    return static_cast<FLOAT_TYPE>(sqrt(sum_of_squares));
-}
-
-template <class FLOAT_TYPE, size_t N> FLOAT_TYPE Vector<FLOAT_TYPE, N>::square_of_length() const {
-    const auto length = this->length();
-    return static_cast<FLOAT_TYPE>(length * length);
+    return static_cast<FLOAT_TYPE>(sum_of_squares);
 }
 
 template <class FLOAT_TYPE, size_t N>
