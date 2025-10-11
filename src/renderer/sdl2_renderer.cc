@@ -32,7 +32,79 @@ void SDL2Renderer::renderSpaceship(Vector2df position, float angle) {
         points[i].x = (cos_angle * x - sin_angle * y) + position[0];
         points[i].y = (sin_angle * x + cos_angle * y) + position[1];
     }
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    SDL_SetRenderDrawColor(renderer, 80, 80, 255, 255);
+    SDL_RenderDrawLines(renderer, points.data(), points.size());
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+}
+
+void SDL2Renderer::renderDeathStar(Vector2df position) {
+    static SDL_Point death_star_points[] = {            // Main sphere outline - 24 points
+                                            {0, -60},   // Top
+                                            {15, -58},  // Outer circle points
+                                            {30, -52},
+                                            {42, -42},
+                                            {52, -30},
+                                            {58, -15},
+                                            {60, 0},  // Right
+                                            {58, 15},
+                                            {52, 30},
+                                            {42, 42},
+                                            {30, 52},
+                                            {15, 58},
+                                            {0, 60},  // Bottom
+                                            {-15, 58},
+                                            {-30, 52},
+                                            {-42, 42},
+                                            {-52, 30},
+                                            {-58, 15},
+                                            {-60, 0},  // Left
+                                            {-58, -15},
+                                            {-52, -30},
+                                            {-42, -42},
+                                            {-30, -52},
+                                            {-15, -58},
+                                            {0, -60},  // Back to top
+
+                                            // Superlaser dish (inner circle) - 16 points
+                                            {-45, 0},  // Left edge of dish
+                                            {-44, -9},
+                                            {-40, -17},
+                                            {-34, -24},
+                                            {-24, -28},
+                                            {-14, -30},
+                                            {-4, -28},
+                                            {4, -24},
+                                            {10, -17},
+                                            {12, -9},
+                                            {12, 0},
+                                            {10, 9},
+                                            {4, 17},
+                                            {-4, 24},
+                                            {-14, 28},
+                                            {-24, 28},
+                                            {-34, 24},
+                                            {-40, 17},
+                                            {-44, 9},
+                                            {-45, 0},  // Close inner circle
+
+                                            // Stripes pointing to the center of the dish
+                                            {-45, -10},  // Top stripe
+                                            {12, -5},    // Point toward dish center
+                                            {-45, 0},    // Middle stripe
+                                            {12, 0},     // Points straight to center
+                                            {-45, 10},   // Bottom stripe
+                                            {12, 5}};    // Point toward dish center
+
+    std::array<SDL_Point, std::span{death_star_points}.size()> points;
+
+    for (size_t i = 0; i < points.size(); i++) {
+        float x     = death_star_points[i].x;
+        float y     = death_star_points[i].y;
+        points[i].x = x + position[0];
+        points[i].y = y + position[1];
+    }
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderDrawLines(renderer, points.data(), points.size());
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
@@ -108,19 +180,33 @@ void SDL2Renderer::render(Torpedo* torpedo) {
 }
 
 void SDL2Renderer::render(Asteroid* asteroid) {
-    static SDL_Point asteroids_points1[] = {{0, -12},   {16, -24},  {32, -12}, {24, 0},
-                                            {32, 12},   {8, 24},    {-16, 24}, {-32, 12},
-                                            {-32, -12}, {-16, -24}, {0, -12}};
-    static SDL_Point asteroids_points2[] = {{16, -6},   {32, -12}, {16, -24}, {0, -16},  {-16, -24},
-                                            {-24, -12}, {-16, -0}, {-32, 12}, {-16, 24}, {-8, 16},
-                                            {16, 24},   {32, 6},   {16, -6}};
-    static SDL_Point asteroids_points3[] = {{-16, 0},  {-32, 6},  {-16, 24}, {0, 6},
-                                            {0, 24},   {16, 24},  {32, 6},   {32, 6},
-                                            {16, -24}, {-8, -24}, {-32, -6}, {-16, 0}};
-    static SDL_Point asteroids_points4[] = {{8, 0},    {32, -6},   {32, -12}, {8, -24},  {-16, -24},
-                                            {-8, -12}, {-32, -12}, {-32, 12}, {-16, 24}, {8, 16},
-                                            {16, 24},  {32, 12},   {8, 0}};
-    static size_t    sizes[]             = {
+    // Type 1: Large asteroid with cratered surface and jagged edges
+    static SDL_Point asteroids_points1[] = {
+        {0, -12},   {8, -18},   {16, -24}, {24, -20}, {32, -12}, {28, -6},  {32, 0},
+        {28, 6},    {32, 12},   {24, 18},  {16, 20},  {8, 24},   {0, 22},   {-8, 24},
+        {-16, 24},  {-24, 20},  {-32, 12}, {-30, 4},  {-36, 0},  {-30, -4}, {-32, -12},
+        {-24, -18}, {-16, -24}, {-8, -20}, {0, -12}};
+
+    // Type 2: Elongated asteroid with impact craters and protrusions
+    static SDL_Point asteroids_points2[] = {
+        {16, -6},  {24, -10},  {32, -12},  {28, -18},  {16, -24}, {8, -20},  {0, -16},
+        {-8, -20}, {-16, -24}, {-24, -18}, {-28, -12}, {-24, -6}, {-16, -0}, {-24, 6},
+        {-32, 12}, {-24, 18},  {-16, 24},  {-8, 20},   {0, 18},   {8, 22},   {16, 24},
+        {24, 18},  {32, 6},    {28, 0},    {16, -6}};
+
+    // Type 3: Diamond-shaped asteroid with irregular surface features
+    static SDL_Point asteroids_points3[] = {
+        {-16, 0}, {-24, 4}, {-32, 6},  {-28, 12},  {-20, 18},  {-16, 24}, {-8, 20},  {0, 24},
+        {8, 20},  {16, 24}, {24, 18},  {32, 6},    {28, 0},    {32, -6},  {24, -12}, {16, -18},
+        {8, -20}, {0, -24}, {-8, -20}, {-16, -16}, {-24, -12}, {-32, -6}, {-24, -2}, {-16, 0}};
+
+    // Type 4: Irregular boulder with multiple facets and cavities
+    static SDL_Point asteroids_points4[] = {
+        {8, 0},   {16, -4}, {32, -6},  {28, -10},  {32, -12},  {24, -18},  {16, -22},
+        {8, -24}, {0, -22}, {-8, -24}, {-16, -24}, {-24, -18}, {-32, -12}, {-28, -6},
+        {-32, 0}, {-28, 6}, {-32, 12}, {-24, 18},  {-16, 24},  {-8, 20},   {0, 22},
+        {8, 16},  {16, 24}, {24, 18},  {32, 12},   {28, 6},    {24, 0},    {8, 0}};
+    static size_t sizes[] = {
         std::span{asteroids_points1}.size(), std::span{asteroids_points2}.size(),
         std::span{asteroids_points3}.size(), std::span{asteroids_points4}.size()};
     size_t     size             = sizes[asteroid->get_rock_type()];
@@ -292,9 +378,12 @@ bool SDL2Renderer::init() {
 }
 
 void SDL2Renderer::render() {
+
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+    renderDeathStar(Vector2df{700.0f, 100.0f});  // Top right corner
 
     for (Body2df* body : game.get_physics().get_bodies()) {
         TypedBody* typed_body = static_cast<TypedBody*>(body);
@@ -313,6 +402,7 @@ void SDL2Renderer::render() {
             render(static_cast<Saucer*>(typed_body));
         }
     }
+
     renderFreeShips();
     renderScore();
     SDL_RenderPresent(renderer);

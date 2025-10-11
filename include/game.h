@@ -10,7 +10,15 @@
 
 // all different types of object used in this Asteroid-Game
 // for each type there will be a corresponding class
-enum class BodyType : short { spaceship, asteroid, torpedo, saucer, spaceship_debris, debris };
+enum class BodyType : short {
+    spaceship,
+    asteroid,
+    torpedo,
+    saucer,
+    spaceship_debris,
+    debris,
+    death_star
+};
 
 // these games events are generated during each tick and can, for instance, be used to
 // generate special view or sound effects
@@ -160,6 +168,16 @@ class Debris : public TypedBody {
                     Body2df{BoundingVolume2df{position, 0.0f}, Vector2df{0.0, 0.0}, 0.0f, 0.0f,
                             angle, displacement_fix}) {
         set_time_to_delete(TIME_TO_DELETE);
+    }
+};
+
+class DeathStar : public TypedBody {
+  public:
+    DeathStar(Vector2df position = Vector2df{0.0, 0.0})  // Top right corner
+        : TypedBody(BodyType::death_star,
+                    Body2df{BoundingVolume2df{position, 30.0f}, Vector2df{0.0, 0.0}, 0.0f, 0.0f,
+                            0.0f, displacement_fix}) {
+        set_time_to_delete(100.0f);  // effectively indestructible
     }
 };
 

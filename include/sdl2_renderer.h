@@ -20,6 +20,7 @@ class SDL2Renderer : public Renderer {
 
     // render methods for the specific game objects, score, and free ships
     void renderSpaceship(Vector2df position, float angle);
+    void renderDeathStar(Vector2df position);
     void render(Spaceship* ship);
     void render(Torpedo* torpedo);
     void render(Asteroid* asteroid);
