@@ -32,7 +32,9 @@ void SDL2Renderer::renderSpaceship(Vector2df position, float angle) {
         points[i].x = (cos_angle * x - sin_angle * y) + position[0];
         points[i].y = (sin_angle * x + cos_angle * y) + position[1];
     }
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
     SDL_RenderDrawLines(renderer, points.data(), points.size());
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
 
 void SDL2Renderer::render(Spaceship* ship) {
@@ -49,16 +51,32 @@ void SDL2Renderer::render(Spaceship* ship) {
                 points[i].x = (cos_angle * x - sin_angle * y) + ship->get_position()[0];
                 points[i].y = (sin_angle * x + cos_angle * y) + ship->get_position()[1];
             }
+            SDL_SetRenderDrawColor(renderer, 255, 60, 0, 255);
             SDL_RenderDrawLines(renderer, points.data(), points.size());
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         }
         renderSpaceship(ship->get_position(), ship->get_angle());
     }
 }
 
 void SDL2Renderer::render(Saucer* saucer) {
-    static SDL_Point saucer_points[] = {{-16, -6}, {16, -6},  {40, 6},   {-40, 6},
-                                        {-16, 18}, {16, 18},  {40, 6},   {16, -6},
-                                        {8, -18},  {-8, -18}, {-16, -6}, {-40, 6}};
+    static SDL_Point saucer_points[] = {
+        {-32, -24},  // Left wing top corner
+        {-32, 24},   // Left wing bottom corner
+        {-16, 12},   // Left wing inner bottom
+        {-8, 8},     // Cockpit bottom left
+        {0, 12},     // Cockpit bottom center
+        {8, 8},      // Cockpit bottom right
+        {16, 12},    // Right wing inner bottom
+        {32, 24},    // Right wing bottom corner
+        {32, -24},   // Right wing top corner
+        {16, -12},   // Right wing inner top
+        {8, -8},     // Cockpit top right
+        {0, -12},    // Cockpit top center
+        {-8, -8},    // Cockpit top left
+        {-16, -12},  // Left wing inner top
+        {-32, -24}   // Back to left wing top corner
+    };
 
     std::array<SDL_Point, std::span{saucer_points}.size()> points;
 
@@ -73,15 +91,20 @@ void SDL2Renderer::render(Saucer* saucer) {
         points[i].x = scale * x + position[0];
         points[i].y = scale * y + position[1];
     }
+
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderDrawLines(renderer, points.data(), points.size());
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
 
 void SDL2Renderer::render(Torpedo* torpedo) {
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     SDL_RenderDrawPoint(renderer, torpedo->get_position()[0], torpedo->get_position()[1]);
     SDL_RenderDrawPoint(renderer, torpedo->get_position()[0] + 1, torpedo->get_position()[1]);
     SDL_RenderDrawPoint(renderer, torpedo->get_position()[0], torpedo->get_position()[1] - 1);
     SDL_RenderDrawPoint(renderer, torpedo->get_position()[0], torpedo->get_position()[1] + 1);
     SDL_RenderDrawPoint(renderer, torpedo->get_position()[0] - 1, torpedo->get_position()[1]);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
 
 void SDL2Renderer::render(Asteroid* asteroid) {
@@ -209,9 +232,9 @@ void SDL2Renderer::renderScore() {
             points[i].y = y + 4 * (digits[d] + i)->y;
         }
         x -= 20;
-        //    SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0x00, 0xFF );
+        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0x00, 0xFF);
         SDL_RenderDrawLines(renderer, points.data(), size);
-        //    SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
         no_of_digits--;
     } while (no_of_digits > 0);
 }
