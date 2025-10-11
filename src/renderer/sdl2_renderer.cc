@@ -34,6 +34,8 @@ void SDL2Renderer::renderSpaceship(Vector2df position, float angle) {
     }
     SDL_SetRenderDrawColor(renderer, 80, 80, 255, 255);
     SDL_RenderDrawLines(renderer, points.data(), points.size());
+
+
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
 
@@ -110,25 +112,56 @@ void SDL2Renderer::renderDeathStar(Vector2df position) {
 }
 
 void SDL2Renderer::render(Spaceship* ship) {
-    static SDL_Point flame_points[]{{-6, 3}, {-12, 0}, {-6, -3}};
-    std::array<SDL_Point, std::span{flame_points}.size()> points;
+  // Main thruster flame
+  static SDL_Point flame_points[]{{-6, 3}, {-12, 0}, {-6, -3}};
+  // Additional flame stripes for more dynamic effect
+  static SDL_Point flame_stripes1[]{{-6, 2}, {-14, 0}, {-6, -2}};
+  static SDL_Point flame_stripes2[]{{-6, 1}, {-10, 0}, {-6, -1}};
+  
+  std::array<SDL_Point, std::span{flame_points}.size()> points;
+  std::array<SDL_Point, std::span{flame_stripes1}.size()> stripes1;
+  std::array<SDL_Point, std::span{flame_stripes2}.size()> stripes2;
 
-    if (!ship->is_in_hyperspace()) {
-        if (ship->is_accelerating()) {
-            float cos_angle = std::cos(ship->get_angle());
-            float sin_angle = std::sin(ship->get_angle());
-            for (size_t i = 0; i < points.size(); i++) {
-                float x     = flame_points[i].x;
-                float y     = flame_points[i].y;
-                points[i].x = (cos_angle * x - sin_angle * y) + ship->get_position()[0];
-                points[i].y = (sin_angle * x + cos_angle * y) + ship->get_position()[1];
-            }
-            SDL_SetRenderDrawColor(renderer, 255, 60, 0, 255);
-            SDL_RenderDrawLines(renderer, points.data(), points.size());
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        }
-        renderSpaceship(ship->get_position(), ship->get_angle());
+  if (!ship->is_in_hyperspace()) {
+    if (ship->is_accelerating()) {
+      float cos_angle = std::cos(ship->get_angle());
+      float sin_angle = std::sin(ship->get_angle());
+      
+      // Transform main flame points
+      for (size_t i = 0; i < points.size(); i++) {
+        float x     = flame_points[i].x;
+        float y     = flame_points[i].y;
+        points[i].x = (cos_angle * x - sin_angle * y) + ship->get_position()[0];
+        points[i].y = (sin_angle * x + cos_angle * y) + ship->get_position()[1];
+      }
+      
+      // Transform additional flame stripes
+      for (size_t i = 0; i < stripes1.size(); i++) {
+        float x      = flame_stripes1[i].x;
+        float y      = flame_stripes1[i].y;
+        stripes1[i].x = (cos_angle * x - sin_angle * y) + ship->get_position()[0];
+        stripes1[i].y = (sin_angle * x + cos_angle * y) + ship->get_position()[1];
+        
+        x = flame_stripes2[i].x;
+        y = flame_stripes2[i].y;
+        stripes2[i].x = (cos_angle * x - sin_angle * y) + ship->get_position()[0];
+        stripes2[i].y = (sin_angle * x + cos_angle * y) + ship->get_position()[1];
+      }
+      
+      // Draw the flames with varying colors
+      SDL_SetRenderDrawColor(renderer, 255, 60, 0, 255); // Bright orange
+      SDL_RenderDrawLines(renderer, points.data(), points.size());
+      
+      SDL_SetRenderDrawColor(renderer, 255, 120, 0, 200); // Medium orange
+      SDL_RenderDrawLines(renderer, stripes1.data(), stripes1.size());
+      
+      SDL_SetRenderDrawColor(renderer, 255, 180, 0, 150); // Light orange/yellow
+      SDL_RenderDrawLines(renderer, stripes2.data(), stripes2.size());
+      
+      SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     }
+    renderSpaceship(ship->get_position(), ship->get_angle());
+  }
 }
 
 void SDL2Renderer::render(Saucer* saucer) {
