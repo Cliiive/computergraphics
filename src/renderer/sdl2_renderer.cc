@@ -144,25 +144,58 @@ void SDL2Renderer::render(Asteroid* asteroid) {
 }
 
 void SDL2Renderer::render(SpaceshipDebris* debris) {
-    static SDL_Point ship_points[6][2] = {
-        {SDL_Point{-2, -1}, SDL_Point{-10, 7}}, {SDL_Point{3, 1}, SDL_Point{7, 8}},
-        {SDL_Point{0, 3}, SDL_Point{6, 1}},     {SDL_Point{3, -1}, SDL_Point{-5, -7}},
-        {SDL_Point{0, -4}, SDL_Point{-6, -6}},  {SDL_Point{-2, 2}, SDL_Point{2, 5}}};
-    static std::array<Vector2df, 6> debris_direction = {Vector2df{-40, -23}, Vector2df{50, 15},
-                                                        Vector2df{0, 45},    Vector2df{60, -15},
-                                                        Vector2df{10, -52},  Vector2df{-40, 30}};
-    Vector2df                       position         = debris->get_position();
-    std::array<SDL_Point, 4>        points;
-    float scale = 0.2 * (SpaceshipDebris::TIME_TO_DELETE - debris->get_time_to_delete());
-    for (size_t i = 0; i < debris_direction.size(); i++) {
-        points[0].x = scale * debris_direction[i][0] + ship_points[i][0].x + position[0];
-        points[0].y = scale * debris_direction[i][1] + ship_points[i][0].y + position[1];
-        points[1].x = scale * debris_direction[i][0] + ship_points[i][1].x + position[0];
-        points[1].y = scale * debris_direction[i][1] + ship_points[i][1].y + position[1];
-        if (debris->get_time_to_delete() >= 0.5 * i) {
-            SDL_RenderDrawLine(renderer, points[0].x, points[0].y, points[1].x, points[1].y);
-        }
+    // Get explosion progress (1.0 = new explosion, 0.0 = about to disappear)
+    float     progress = debris->get_time_to_delete() / SpaceshipDebris::TIME_TO_DELETE;
+    Vector2df position = debris->get_position();
+
+    // Explosion shockwave ring
+    const int   segments   = 20;
+    const float max_radius = 40.0f;
+    float       radius     = max_radius * (1.0f - progress);
+
+    // Draw shockwave ring with fading intensity
+    int alpha = static_cast<int>(255 * progress);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, alpha);
+
+    for (int i = 0; i < segments; i++) {
+        float angle1 = (i / static_cast<float>(segments)) * 2 * M_PI;
+        float angle2 = ((i + 1) / static_cast<float>(segments)) * 2 * M_PI;
+
+        int x1 = position[0] + radius * std::cos(angle1);
+        int y1 = position[1] + radius * std::sin(angle1);
+        int x2 = position[0] + radius * std::cos(angle2);
+        int y2 = position[1] + radius * std::sin(angle2);
+
+        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
     }
+
+    // Particle effects - flying debris
+    const int num_particles = 12;
+    for (int i = 0; i < num_particles; i++) {
+        float angle        = (i / static_cast<float>(num_particles)) * 2 * M_PI;
+        float speed_factor = 0.5f + static_cast<float>(i % 3) / 2.0f;  // Varied speeds
+
+        float particle_dist = (1.0f - progress) * 60.0f * speed_factor;
+
+        int x1 = position[0] + (particle_dist * 0.5f) * std::cos(angle);
+        int y1 = position[1] + (particle_dist * 0.5f) * std::sin(angle);
+        int x2 = position[0] + particle_dist * std::cos(angle);
+        int y2 = position[1] + particle_dist * std::sin(angle);
+
+        // Set color based on particle and explosion age (yellow->orange->red)
+        if (progress > 0.7f) {
+            SDL_SetRenderDrawColor(renderer, 255, 255, 0, alpha);  // Bright yellow
+        } else if (progress > 0.4f) {
+            SDL_SetRenderDrawColor(renderer, 255, 128, 0, alpha);  // Orange
+        } else {
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, alpha);  // Red
+        }
+
+        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+    }
+
+    // Reset color
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 }
 
 void SDL2Renderer::render(Debris* debris) {
