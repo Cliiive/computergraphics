@@ -65,13 +65,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 // Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
 
-constexpr int         WINDOW_WIDTH  = 500;
-constexpr int         WINDOW_HEIGTH = 500;
-constexpr const char* WINDOW_TITLE  = "Raytracer";
-
 int main(void) {
     // Bildschirm erstellen
-    win::Window window(WINDOW_TITLE, WINDOW_HEIGTH, WINDOW_WIDTH);
+    win::Window window(win::WINDOW_TITLE, win::WINDOW_HEIGTH, win::WINDOW_WIDTH);
     auto        pos = win::WindowPos{.x = 100, .y = 100};
     win::setPixelColor(window, pos, 0xFFFFFFFF);
     // Kamera erstellen
