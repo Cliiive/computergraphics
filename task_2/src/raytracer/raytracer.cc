@@ -1,6 +1,9 @@
 #include "math.h"
 #include "geometry.h"
 #include "window.h"
+#include "viewport.h"
+#include "camera.h"
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -68,9 +71,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 int main(void) {
     // Bildschirm erstellen
     win::Window window(win::WINDOW_TITLE, win::WINDOW_HEIGTH, win::WINDOW_WIDTH);
-    auto        pos = win::WindowPos{.x = 100, .y = 100};
-    win::setPixelColor(window, pos, 0xFFFFFFFF);
+
     // Kamera erstellen
+    view::Viewport viewport{2.0, 2.0, 1.0, win::WINDOW_WIDTH, win::WINDOW_HEIGTH};
+    camera::Camera camera{Vector3df{0.0, 0.0, 0.0}, Vector3df{0.0, 0.0, 1.0}, viewport};
+
     // Für jede Pixelkoordinate x,y
     //   Sehstrahl für x,y mit Kamera erzeugen
     //   Farbe mit raytracing-Methode bestimmen
