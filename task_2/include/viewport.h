@@ -12,8 +12,10 @@ class Viewport {
   private:
     Vector3df _u, _v;
     Vector3df _upperLeft;
+    Vector3df _firstPixel;
     Vector3df _pixelDelta_u, _pixelDelta_v;
-    float     _focalLength;
-    int       _pixelWidth, _pixelHeight;
+
+    float _focalLength;
+    int   _pixelWidth, _pixelHeight;
 };
 }  // namespace rt::view
