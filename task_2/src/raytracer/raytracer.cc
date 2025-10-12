@@ -1,46 +1,45 @@
 #include "math.h"
 #include "geometry.h"
+#include "window.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
 
+#ifdef _WIN32
+#include <windows.h>
+int main(void);
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int CmdShow) {
+    return main();
+}
+#endif
+
 // Die folgenden Kommentare beschreiben Datenstrukturen und Funktionen
 // Die Datenstrukturen und Funktionen die weiter hinten im Text beschrieben sind,
 // hängen höchstens von den vorhergehenden Datenstrukturen ab, aber nicht umgekehrt.
-
-
 
 // Ein "Bildschirm", der das Setzen eines Pixels kapselt
 // Der Bildschirm hat eine Auflösung (Breite x Höhe)
 // Kann zur Ausgabe einer PPM-Datei verwendet werden oder
 // mit SDL2 implementiert werden.
 
-
-
 // Eine "Kamera", die von einem Augenpunkt aus in eine Richtung senkrecht auf ein Rechteck (das Bild) zeigt.
 // Für das Rechteck muss die Auflösung oder alternativ die Pixelbreite und -höhe bekannt sein.
 // Für ein Pixel mit Bildkoordinate kann ein Sehstrahl erzeugt werden.
-
-
 
 // Für die "Farbe" benötigt man nicht unbedingt eine eigene Datenstruktur.
 // Sie kann als Vector3df implementiert werden mit Farbanteil von 0 bis 1.
 // Vor Setzen eines Pixels auf eine bestimmte Farbe (z.B. 8-Bit-Farbtiefe),
 // kann der Farbanteil mit 255 multipliziert  und der Nachkommaanteil verworfen werden.
 
-
 // Das "Material" der Objektoberfläche mit ambienten, diffusem und reflektiven Farbanteil.
-
-
 
 // Ein "Objekt", z.B. eine Kugel oder ein Dreieck, und dem zugehörigen Material der Oberfläche.
 // Im Prinzip ein Wrapper-Objekt, das mindestens Material und geometrisches Objekt zusammenfasst.
 // Kugel und Dreieck finden Sie in geometry.h/tcc
 
-
 // verschiedene Materialdefinition, z.B. Mattes Schwarz, Mattes Rot, Reflektierendes Weiss, ...
 // im wesentlichen Variablen, die mit Konstruktoraufrufen initialisiert werden.
-
 
 // Die folgenden Werte zur konkreten Objekten, Lichtquellen und Funktionen, wie Lambertian-Shading
 // oder die Suche nach einem Sehstrahl für das dem Augenpunkt am nächsten liegenden Objekte,
@@ -64,15 +63,34 @@
 
 // Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
 
+constexpr int         WINDOW_WIDTH  = 500;
+constexpr int         WINDOW_HEIGTH = 500;
+constexpr const char* WINDOW_TITLE  = "Raytracer";
 
 int main(void) {
-  // Bildschirm erstellen
-  // Kamera erstellen
-  // Für jede Pixelkoordinate x,y
-  //   Sehstrahl für x,y mit Kamera erzeugen
-  //   Farbe mit raytracing-Methode bestimmen
-  //   Beim Bildschirm die Farbe für Pixel x,y, setzten
+    // Bildschirm erstellen
+    rt::Window window(WINDOW_TITLE, WINDOW_HEIGTH, WINDOW_WIDTH);
+    auto       pos = rt::WindowPos{.x = 100, .y = 100};
+    rt::setPixelColor(window, pos, 0xFFFFFFFF);
+    // Kamera erstellen
 
-  return 0;   
+    bool      running = true;
+    SDL_Event event;
+
+    while (running) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                running = false;  // exit loop
+            }
+        }
+
+        // Optional: add delay to reduce CPU usage
+        SDL_Delay(16);  // ~60 FPS
+    }
+    // Für jede Pixelkoordinate x,y
+    //   Sehstrahl für x,y mit Kamera erzeugen
+    //   Farbe mit raytracing-Methode bestimmen
+    //   Beim Bildschirm die Farbe für Pixel x,y, setzten
+
+    return 0;
 }
-

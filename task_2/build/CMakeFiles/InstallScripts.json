@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"E:/Development/studium/computergraphics/task_2/build/cmake_install.cmake",
-		"E:/Development/studium/computergraphics/task_2/build/tests/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

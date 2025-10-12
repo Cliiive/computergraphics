@@ -14,10 +14,11 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # Main executable
 add_executable(raytracer src/raytracer/raytracer.cc
                          src/math/math.cc 
-                         src/geometry/geometry.cc 
+                         src/geometry/geometry.cc
+                         src/raytracer/window.cc 
 )
 
-target_link_libraries(raytracer SDL2 SDL2_mixer)
+target_link_libraries(raytracer SDL2)
 
 # Enable testing for CTest
 enable_testing()
