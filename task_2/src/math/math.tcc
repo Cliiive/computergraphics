@@ -111,6 +111,14 @@ FLOAT_TYPE operator*(Vector<FLOAT_TYPE, N> vector1, const Vector<FLOAT_TYPE, N> 
     return static_cast<FLOAT_TYPE>(scalar_product);
 }
 
+// Implementation in math.tcc
+template <class FLOAT_TYPE, size_t N>
+Vector<FLOAT_TYPE, N> operator/(const Vector<FLOAT_TYPE, N> value, const FLOAT_TYPE factor) {
+    Vector<FLOAT_TYPE, N> result = value;
+    result /= factor;
+    return result;
+}
+
 template <class FLOAT_TYPE, size_t N> void Vector<FLOAT_TYPE, N>::normalize() {
     *this /= length();  //  +/- INFINITY if length is (near to) zero
 }

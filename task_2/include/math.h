@@ -9,6 +9,8 @@
 template <class FLOAT_TYPE, size_t N> struct Vector {
     static_assert(N > 0u);  // no zero length vectors allowed
 
+    Vector() : vector{} {}
+
     // stores the N scalar values of this Vector
     // index 0, 1, 2, ... corresponds to x,y,z,... axis
     std::array<FLOAT_TYPE, N> vector;
@@ -79,6 +81,8 @@ template <class FLOAT_TYPE, size_t N> struct Vector {
     // returns the scalar (inner) product of two Vectors
     template <class F, size_t K>
     friend F operator*(Vector<F, K> vector1, const Vector<F, K> vector2);
+
+    template <class F, size_t K> friend Vector<F, K> operator/(Vector<F, K> value, const F factor);
 };
 
 static const long double PI = std::acos(-1.0L);

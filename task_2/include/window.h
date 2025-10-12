@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-
+#include "math.h"
 namespace rt::win {
 
 constexpr int         WINDOW_WIDTH  = 500;
