@@ -73,24 +73,11 @@ int main(void) {
     auto       pos = rt::WindowPos{.x = 100, .y = 100};
     rt::setPixelColor(window, pos, 0xFFFFFFFF);
     // Kamera erstellen
-
-    bool      running = true;
-    SDL_Event event;
-
-    while (running) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                running = false;  // exit loop
-            }
-        }
-
-        // Optional: add delay to reduce CPU usage
-        SDL_Delay(16);  // ~60 FPS
-    }
     // Für jede Pixelkoordinate x,y
     //   Sehstrahl für x,y mit Kamera erzeugen
     //   Farbe mit raytracing-Methode bestimmen
     //   Beim Bildschirm die Farbe für Pixel x,y, setzten
 
+    rt::waitForExit();
     return 0;
 }

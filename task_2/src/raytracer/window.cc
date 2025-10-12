@@ -25,4 +25,18 @@ void setPixelColor(Window& window, WindowPos& pos, Uint32 color) {
     SDL_UpdateWindowSurface(window.handle());
 }
 
+void waitForExit() {
+    bool      running = true;
+    SDL_Event event;
+    while (running) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                running = false;  // exit loop
+            }
+        }
+        // Optional: add delay to reduce CPU usage
+        SDL_Delay(16);  // ~60 FPS
+    }
+}
+
 }  // namespace rt

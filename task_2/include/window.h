@@ -27,4 +27,6 @@ class Window {
 
 void setPixelColor(Window& window, WindowPos& pos, Uint32 color);
 
+void waitForExit();
+
 }  // namespace rt
