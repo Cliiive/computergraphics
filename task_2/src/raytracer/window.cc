@@ -1,7 +1,7 @@
 #include "window.h"
 #include <stdexcept>
 
-namespace rt {
+namespace rt::win {
 
 Window::Window(const char* title, int w, int h) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -39,4 +39,4 @@ void waitForExit() {
     }
 }
 
-}  // namespace rt
+}  // namespace rt::win

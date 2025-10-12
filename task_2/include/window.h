@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 
-namespace rt {
+namespace rt::win {
 
 struct WindowPos {
     int x;
@@ -29,4 +29,4 @@ void setPixelColor(Window& window, WindowPos& pos, Uint32 color);
 
 void waitForExit();
 
-}  // namespace rt
+}  // namespace rt::win

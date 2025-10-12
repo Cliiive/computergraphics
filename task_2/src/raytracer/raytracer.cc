@@ -5,6 +5,8 @@
 #include <vector>
 #include <algorithm>
 
+using namespace rt;
+
 #ifdef _WIN32
 #include <windows.h>
 int main(void);
@@ -69,15 +71,15 @@ constexpr const char* WINDOW_TITLE  = "Raytracer";
 
 int main(void) {
     // Bildschirm erstellen
-    rt::Window window(WINDOW_TITLE, WINDOW_HEIGTH, WINDOW_WIDTH);
-    auto       pos = rt::WindowPos{.x = 100, .y = 100};
-    rt::setPixelColor(window, pos, 0xFFFFFFFF);
+    win::Window window(WINDOW_TITLE, WINDOW_HEIGTH, WINDOW_WIDTH);
+    auto        pos = win::WindowPos{.x = 100, .y = 100};
+    win::setPixelColor(window, pos, 0xFFFFFFFF);
     // Kamera erstellen
     // Für jede Pixelkoordinate x,y
     //   Sehstrahl für x,y mit Kamera erzeugen
     //   Farbe mit raytracing-Methode bestimmen
     //   Beim Bildschirm die Farbe für Pixel x,y, setzten
 
-    rt::waitForExit();
+    win::waitForExit();
     return 0;
 }
