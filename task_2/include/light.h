@@ -1,0 +1,15 @@
+#pragma once
+
+#include "math.h"
+#include <vector>
+
+namespace rt {
+struct HitInfo;
+struct Light {
+    Vector3df position;
+    Vector3df color;
+    float     intensity;
+};
+
+const std::vector<Light> findLightSources(const HitInfo& info);
+}  // namespace rt

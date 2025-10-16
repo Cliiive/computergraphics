@@ -1,7 +1,7 @@
 #pragma once
 #include "hittable.h"
 
-namespace rt::scene {
+namespace rt {
 
 template <typename GeometryT> class GeometricObject : public Hittable {
   private:
@@ -16,7 +16,7 @@ template <typename GeometryT> class GeometricObject : public Hittable {
     HitInfo intersect(const Ray3df& ray) const override {
         Intersection_Context<float, 3> ctx{};
         bool                           hit = geo.intersects(ray, ctx);
-        return {hit, ctx.t, ctx.normal};
+        return {hit, ctx.t, ctx.normal, ctx.intersection, &mat};
     }
 
     const Material& material() const override {
@@ -27,4 +27,4 @@ template <typename GeometryT> class GeometricObject : public Hittable {
 using SphereObject   = GeometricObject<Sphere3df>;
 using TriangleObject = GeometricObject<Triangle3df>;
 
-}  // namespace rt::scene
+}  // namespace rt

@@ -1,15 +1,14 @@
 #pragma once
 #include "geometry.h"
 #include "shader.h"
-
-namespace rt::scene {
-
-using namespace rt::shader;
+namespace rt {
 
 struct HitInfo {
-    bool      hit;
-    float     tHit;
-    Vector3df normal;
+    bool            hit;
+    float           tHit;
+    Vector3df       normal;
+    Vector3df       hitPoint;
+    const Material* material;
 };
 
 class Hittable {
@@ -18,4 +17,4 @@ class Hittable {
     virtual const Material& material() const                   = 0;
     virtual ~Hittable()                                        = default;
 };
-}  // namespace rt::scene
+}  // namespace rt
