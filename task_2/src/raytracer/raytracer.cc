@@ -67,15 +67,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 // Am besten einen Zeiger auf das Objekt zurückgeben. Wenn dieser nullptr ist, dann gibt es kein sichtbares Objekt.
 
 // Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
+int ray_color(const Ray3df& r) {
+    Vector3df unit_direction = r.direction;
+    unit_direction.normalize();
+    auto a = 0.5 * (unit_direction.vector[1] + 1.0);
+    return (1.0 - a) * 101010 + a * 111111;
+}
 
 int main(void) {
     // Bildschirm erstellen
     win::Window window(win::WINDOW_TITLE, win::WINDOW_HEIGTH, win::WINDOW_WIDTH);
 
     // Kamera erstellen
-    view::Viewport viewport{2.0, 2.0, 1.0, win::WINDOW_WIDTH, win::WINDOW_HEIGTH};
-    camera::Camera camera{Vector3df{0.0, 0.0, 0.0}, Vector3df{0.0, 0.0, 1.0}, viewport};
+    view::Viewport viewport{2.0, 2.0, 2.0, win::WINDOW_WIDTH, win::WINDOW_HEIGTH};
+    camera::Camera camera{Vector3df{0.0, 0.0, 0.0}, Vector3df{0.0, 0.0, -1.0}, viewport};
 
+    for (int i = 0; i < win::WINDOW_WIDTH; i++) {
+        for (int j = 0; j < win::WINDOW_HEIGTH; j++) {
+            auto ray = camera.getRay(i, j);
+            auto pos = win::WindowPos{.x = i, .y = j};
+            win::setPixelColor(window, pos, ray_color(ray));
+        }
+    }
     // Für jede Pixelkoordinate x,y
     //   Sehstrahl für x,y mit Kamera erzeugen
     //   Farbe mit raytracing-Methode bestimmen

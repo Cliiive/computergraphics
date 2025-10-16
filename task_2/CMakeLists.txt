@@ -18,6 +18,7 @@ add_executable(raytracer src/raytracer/raytracer.cc
                          src/raytracer/window.cc 
                          src/raytracer/camera.cc
                          src/raytracer/viewport.cc
+                         src/raytracer/world.cc
 )
 
 target_link_libraries(raytracer SDL2)

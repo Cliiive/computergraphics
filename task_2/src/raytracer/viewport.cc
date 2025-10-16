@@ -28,8 +28,8 @@ Ray3df Viewport::generateRay(const Vector3df& cameraPosition, const Vector3df& c
     const auto xPos          = static_cast<float>(pixelX) * _pixelDelta_u;
     const auto yPos          = static_cast<float>(pixelY) * _pixelDelta_v;
     auto       pixelCenter   = _firstPixel + (xPos + yPos);
-    auto       ray_direction = pixelCenter - cameraPosition;
-
+    auto       ray_direction = (pixelCenter - cameraPosition);
+    ray_direction.normalize();
     return Ray3df{cameraPosition, ray_direction};
 }
 
