@@ -3,6 +3,7 @@
 #include "window.h"
 #include "viewport.h"
 #include "camera.h"
+#include "world.h"
 
 #include <iostream>
 #include <vector>
@@ -67,11 +68,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 // Am besten einen Zeiger auf das Objekt zurückgeben. Wenn dieser nullptr ist, dann gibt es kein sichtbares Objekt.
 
 // Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
-int ray_color(const Ray3df& r) {
-    Vector3df unit_direction = r.direction;
-    unit_direction.normalize();
-    auto a = 0.5 * (unit_direction.vector[1] + 1.0);
-    return (1.0 - a) * 101010 + a * 111111;
+static Uint32 vecToPixel(const Vector3df& c) {
+    auto to8 = [](double v) -> Uint32 {
+        if (v < 0.0)
+            v = 0.0;
+        if (v > 1.0)
+            v = 1.0;
+        return static_cast<Uint32>(v * 255.0 + 0.5);
+    };
+
+    Uint32 r = to8(c.vector[0]);
+    Uint32 g = to8(c.vector[1]);
+    Uint32 b = to8(c.vector[2]);
+
+    // Pack into 0xRRGGBB
+    return (r << 16) | (g << 8) | b;
 }
 
 int main(void) {
@@ -80,20 +91,33 @@ int main(void) {
 
     // Kamera erstellen
     view::Viewport viewport{2.0, 2.0, 2.0, win::WINDOW_WIDTH, win::WINDOW_HEIGTH};
-    camera::Camera camera{Vector3df{0.0, 0.0, 0.0}, Vector3df{0.0, 0.0, -1.0}, viewport};
+    camera::Camera camera{Vector3df{0.0, 0.0, 10.0}, Vector3df{0.0, 0.0, -1.0}, viewport};
+
+    const auto& sceneWorld = world::createScene();
 
     for (int i = 0; i < win::WINDOW_WIDTH; i++) {
         for (int j = 0; j < win::WINDOW_HEIGTH; j++) {
             auto ray = camera.getRay(i, j);
             auto pos = win::WindowPos{.x = i, .y = j};
-            win::setPixelColor(window, pos, ray_color(ray));
+            //std::cout << pos.x << ", " << pos.y << std::endl;
+
+            auto   object = world::findVisibleObject(ray, sceneWorld);
+            Uint32 color  = 0;
+
+            if (object.has_value()) {
+                color = vecToPixel(object.value().get().material().getColor());
+            }
+
+            win::setPixelColor(window, pos, color);
         }
     }
+
+    SDL_UpdateWindowSurface(window.handle());
     // Für jede Pixelkoordinate x,y
     //   Sehstrahl für x,y mit Kamera erzeugen
     //   Farbe mit raytracing-Methode bestimmen
     //   Beim Bildschirm die Farbe für Pixel x,y, setzten
-
+    std::cout << "PROGRAMM FINISHED" << std::endl;
     win::waitForExit();
     return 0;
 }

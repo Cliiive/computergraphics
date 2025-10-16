@@ -22,7 +22,6 @@ Window::~Window() {
 void setPixelColor(Window& window, WindowPos& pos, Uint32 color) {
     Uint32* pixels                              = (Uint32*) window.surface()->pixels;
     pixels[pos.y * window.surface()->w + pos.x] = color;
-    SDL_UpdateWindowSurface(window.handle());
 }
 
 void waitForExit() {

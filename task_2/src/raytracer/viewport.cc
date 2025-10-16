@@ -14,7 +14,7 @@ Viewport::Viewport(float width, float height, float focalLength, int pixelWidth,
     _pixelDelta_v = _v / static_cast<float>(_pixelHeight);
 
     // Calculate the viewport upper left corner
-    Vector3df viewportCenter = Vector3df{0.0f, 0.0f, -_focalLength};
+    Vector3df viewportCenter = Vector3df{0.0f, 0.0f, -1.0f * _focalLength};
     Vector3df halfWidth      = _u / 2.0f;
     Vector3df halfHeight     = _v / 2.0f;
 
