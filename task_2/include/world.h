@@ -139,6 +139,24 @@ inline std::vector<Hittable> createScene() {
     objects.emplace_back(TriangleObject(rightA, rightB, rightD, redMaterial));
     objects.emplace_back(TriangleObject(rightB, rightC, rightD, redMaterial));
 
+    // Top wall
+    Vector3df topA{xMin, yMax, zNear}, topB{xMax, yMax, zNear}, topC{xMin, yMax, zFar},
+        topD{xMax, yMax, zFar};
+    objects.emplace_back(TriangleObject(topA, topB, topC, wallMaterial));
+    objects.emplace_back(TriangleObject(topC, topB, topD, wallMaterial));
+
+    // Bottom wall
+    Vector3df bottomA{xMin, yMin, zNear}, bottomB{xMax, yMin, zNear}, bottomC{xMin, yMin, zFar},
+        bottomD{xMax, yMin, zFar};
+    objects.emplace_back(TriangleObject(bottomA, bottomB, bottomC, wallMaterial));
+    objects.emplace_back(TriangleObject(bottomC, bottomB, bottomD, wallMaterial));
+
+    // Back wall
+    Vector3df backA{xMin, yMax, zFar}, backB{xMax, yMax, zFar}, backC{xMin, yMin, zFar},
+        backD{xMax, yMin, zFar};
+    objects.emplace_back(TriangleObject(backA, backB, backC, wallMaterial));
+    objects.emplace_back(TriangleObject(backC, backB, backD, wallMaterial));
+
     objects.emplace_back(SphereObject(Vector3df{-0.1f, -0.5f, -8.0f}, 0.3f, whiteMaterial));
 
     return objects;
