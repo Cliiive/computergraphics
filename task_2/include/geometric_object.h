@@ -1,7 +1,7 @@
 #pragma once
 #include "hittable.h"
 
-namespace rt::world {
+namespace rt::scene {
 
 template <typename GeometryT> class GeometricObject : public Hittable {
   private:
@@ -27,4 +27,4 @@ template <typename GeometryT> class GeometricObject : public Hittable {
 using SphereObject   = GeometricObject<Sphere3df>;
 using TriangleObject = GeometricObject<Triangle3df>;
 
-}  // namespace rt::world
+}  // namespace rt::scene

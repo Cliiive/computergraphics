@@ -4,7 +4,7 @@
 #include <optional>
 #include "geometric_object.h"
 
-namespace rt::world {
+namespace rt::scene {
 
 inline std::vector<std::unique_ptr<Hittable>> createScene() {
     std::vector<std::unique_ptr<Hittable>> objects;
@@ -73,4 +73,4 @@ findVisibleObject(const Ray3df& ray, const std::vector<std::unique_ptr<Hittable>
     return std::nullopt;
 }
 
-}  // namespace rt::world
+}  // namespace rt::scene

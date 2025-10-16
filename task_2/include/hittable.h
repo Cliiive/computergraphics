@@ -2,7 +2,7 @@
 #include "geometry.h"
 #include "shader.h"
 
-namespace rt::world {
+namespace rt::scene {
 
 using namespace rt::shader;
 
@@ -18,4 +18,4 @@ class Hittable {
     virtual const Material& material() const                   = 0;
     virtual ~Hittable()                                        = default;
 };
-}  // namespace rt::world
+}  // namespace rt::scene
