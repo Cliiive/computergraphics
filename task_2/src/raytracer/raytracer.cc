@@ -3,7 +3,8 @@
 #include "window.h"
 #include "viewport.h"
 #include "camera.h"
-#include "world.h"
+#include "scene.h"
+#include "shader.h"
 
 #include <iostream>
 #include <vector>
@@ -67,24 +68,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 // Für einen Sehstrahl aus allen Objekte, dasjenige finden, das dem Augenpunkt am nächsten liegt.
 // Am besten einen Zeiger auf das Objekt zurückgeben. Wenn dieser nullptr ist, dann gibt es kein sichtbares Objekt.
 
-// Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
-static Uint32 vecToPixel(const Vector3df& c) {
-    auto to8 = [](double v) -> Uint32 {
-        if (v < 0.0)
-            v = 0.0;
-        if (v > 1.0)
-            v = 1.0;
-        return static_cast<Uint32>(v * 255.0 + 0.5);
-    };
-
-    Uint32 r = to8(c.vector[0]);
-    Uint32 g = to8(c.vector[1]);
-    Uint32 b = to8(c.vector[2]);
-
-    // Pack into 0xRRGGBB
-    return (r << 16) | (g << 8) | b;
-}
-
 int main(void) {
     // Bildschirm erstellen
     win::Window window(win::WINDOW_TITLE, win::WINDOW_HEIGTH, win::WINDOW_WIDTH);
@@ -105,7 +88,7 @@ int main(void) {
             Uint32 color  = 0;
 
             if (object.has_value()) {
-                color = vecToPixel(object.value().get().material().getColor());
+                color = shader::vecToPixel(object.value()->material().getColor());
             }
 
             win::setPixelColor(window, pos, color);
