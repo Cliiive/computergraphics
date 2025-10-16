@@ -107,17 +107,40 @@ class Hittable {
 inline std::vector<Hittable> createScene() {
     std::vector<Hittable> objects;
 
-    // Create materials
+    // Materials
     Material redMaterial;
     redMaterial.diffuse = Vector3df{0.9f, 0.1f, 0.1f};
 
-    Material blueMaterial;
-    blueMaterial.diffuse      = Vector3df{0.1f, 0.1f, 0.9f};
-    blueMaterial.reflectivity = 0.3f;
+    Material greenMaterial;
+    greenMaterial.diffuse = Vector3df{0.1f, 0.9f, 0.1f};
 
-    // Add objects
-    objects.emplace_back(SphereObject(Vector3df{0.0f, 0.0f, -5.0f}, 1.0f, redMaterial));
-    objects.emplace_back(SphereObject(Vector3df{2.0f, 0.0f, -7.0f}, 1.0f, blueMaterial));
+    Material whiteMaterial;
+    whiteMaterial.diffuse = Vector3df{0.9f, 0.9f, 0.9f};
+
+    Material wallMaterial;
+    wallMaterial.diffuse = Vector3df{0.8f, 0.8f, 0.8f};
+
+    // Box coordinates (open front at z = 0; box extends into negative z)
+    const float xMin = -1.0f, xMax = 1.0f;
+    const float yMin = -1.0f, yMax = 1.0f;
+    const float zNear = -10.0f;  // front (open)
+    const float zFar  = -30.0f;  // back
+
+    // Left wall
+    Vector3df leftA{xMin, yMin, zNear}, leftB{xMin, yMax, zNear}, leftC{xMin, yMin, zFar},
+        leftD{xMin, yMax, zFar};
+    objects.emplace_back(TriangleObject(leftA, leftB, leftC, greenMaterial));
+    objects.emplace_back(TriangleObject(leftC, leftB, leftD, greenMaterial));
+    //objects.emplace_back(TriangleObject(leftC, leftD, leftA, greenMaterial));
+
+    // Right wall
+    Vector3df rightA{xMax, yMin, zNear}, rightB{xMax, yMax, zNear}, rightC{xMax, yMax, zFar},
+        rightD{xMax, yMin, zFar};
+    objects.emplace_back(TriangleObject(rightA, rightB, rightD, redMaterial));
+    objects.emplace_back(TriangleObject(rightB, rightC, rightD, redMaterial));
+
+    objects.emplace_back(SphereObject(Vector3df{-0.1f, -0.5f, -8.0f}, 0.3f, whiteMaterial));
+
     return objects;
 };
 

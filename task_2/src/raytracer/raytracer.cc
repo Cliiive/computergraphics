@@ -90,7 +90,7 @@ int main(void) {
     win::Window window(win::WINDOW_TITLE, win::WINDOW_HEIGTH, win::WINDOW_WIDTH);
 
     // Kamera erstellen
-    view::Viewport viewport{2.0, 2.0, 2.0, win::WINDOW_WIDTH, win::WINDOW_HEIGTH};
+    view::Viewport viewport{2.0, 2.0, 10.0, win::WINDOW_WIDTH, win::WINDOW_HEIGTH};
     camera::Camera camera{Vector3df{0.0, 0.0, 10.0}, Vector3df{0.0, 0.0, -1.0}, viewport};
 
     const auto& sceneWorld = world::createScene();

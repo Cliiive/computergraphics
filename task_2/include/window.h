@@ -4,8 +4,8 @@
 #include "math.h"
 namespace rt::win {
 
-constexpr int         WINDOW_WIDTH  = 500;
-constexpr int         WINDOW_HEIGTH = 500;
+constexpr int         WINDOW_WIDTH  = 1000;
+constexpr int         WINDOW_HEIGTH = 1000;
 constexpr const char* WINDOW_TITLE  = "Raytracer";
 
 struct WindowPos {
