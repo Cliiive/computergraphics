@@ -24,10 +24,8 @@ const Uint32 vecToPixel(const Vector3df& c) {
 
 const Vector3df lambertian(std::vector<Light> lights, const HitInfo& info) {
     // If we didn't hit anything, return black
-    if (!info.hit) {
-        std::cout << "didnt git anything" << std::endl;
+    if (!info.hit)
         return Vector3df{0.0f, 0.0f, 0.0f};
-    }
 
     Vector3df result{0.0f, 0.0f, 0.0f};
 
@@ -41,10 +39,11 @@ const Vector3df lambertian(std::vector<Light> lights, const HitInfo& info) {
         // Calculate the cosine of angle between normal and light direction
         float cosTheta = std::max(0.0f, info.normal * lightDir);
 
-        Vector3df diffuse = cosTheta * info.material->diffuse;
-
-        result = result + diffuse;
+        Vector3df diffuse = light.intensity * (cosTheta * info.material->diffuse);
+        result            = result + diffuse;
     }
+
+    result += (0.5f * info.material->diffuse);
 
     // Ensure values are in valid range
     for (int i = 0; i < 3; i++) {

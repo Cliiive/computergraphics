@@ -10,6 +10,4 @@ struct Light {
     Vector3df color;
     float     intensity;
 };
-
-const std::vector<Light> findLightSources(const HitInfo& info);
 }  // namespace rt

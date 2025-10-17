@@ -76,7 +76,7 @@ int main(void) {
     view::Viewport viewport{2.0, 2.0, 10.0, win::WINDOW_WIDTH, win::WINDOW_HEIGTH};
     camera::Camera camera{Vector3df{0.0, 0.0, 10.0}, Vector3df{0.0, 0.0, -1.0}, viewport};
 
-    const auto& sceneWorld = createScene();
+    auto sceneWorld = createScene();
 
     for (int i = 0; i < win::WINDOW_WIDTH; i++) {
         for (int j = 0; j < win::WINDOW_HEIGTH; j++) {
@@ -84,11 +84,12 @@ int main(void) {
             auto pos = win::WindowPos{.x = i, .y = j};
             //std::cout << pos.x << ", " << pos.y << std::endl;
 
-            auto   hitInfo = findNearestObject(ray, sceneWorld);
-            Uint32 color   = 100;
-
+            auto               hitInfo = findNearestObject(ray, sceneWorld);
+            Uint32             color   = 250;  // Hintergrundfarbe Weiß
+            std::vector<Light> sceneLights;
             if (hitInfo.has_value()) {
-                color = vecToPixel(lambertian(lights, hitInfo.value()));
+                sceneLights = findLightSources(hitInfo.value(), sceneWorld);
+                color       = vecToPixel(lambertian(sceneLights, hitInfo.value()));
             }
 
             win::setPixelColor(window, pos, color);

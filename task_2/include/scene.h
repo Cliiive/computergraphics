@@ -8,10 +8,13 @@
 namespace rt {
 
 std::vector<std::unique_ptr<Hittable>> createScene();
-const std::vector<Light>               lights = {
-    Light{Vector3df{0.0f, 0.0f, -2.0f}, Vector3df{1.0f, 1.0f, 1.0f}, 1.0}};
+const std::vector<Light>               LIGHTS = {
+    Light{Vector3df{0.0f, 0.3f, -10.0f}, Vector3df{1.0f, 1.0f, 1.0f}, 0.5f}};
 
 std::optional<const HitInfo> findNearestObject(const Ray3df&                                 ray,
                                                const std::vector<std::unique_ptr<Hittable>>& scene);
+
+std::vector<Light> findLightSources(const HitInfo&                          info,
+                                    std::vector<std::unique_ptr<Hittable>>& scene);
 
 }  // namespace rt

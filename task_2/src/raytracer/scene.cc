@@ -7,10 +7,10 @@ std::vector<std::unique_ptr<Hittable>> createScene() {
     std::vector<std::unique_ptr<Hittable>> objects;
 
     Material red, green, white, wall;
-    red.diffuse   = {0.9f, 0.1f, 0.1f};
-    green.diffuse = {0.1f, 0.9f, 0.1f};
+    red.diffuse   = {0.5f, 0.0f, 0.0f};
+    green.diffuse = {0.0f, 0.5f, 0.0f};
     white.diffuse = {0.9f, 0.9f, 0.9f};
-    wall.diffuse  = {0.8f, 0.8f, 0.8f};
+    wall.diffuse  = {0.2f, 0.2f, 0.2f};
 
     const float xMin = -1.0f, xMax = 1.0f;
     const float yMin = -1.0f, yMax = 1.0f;
@@ -22,17 +22,17 @@ std::vector<std::unique_ptr<Hittable>> createScene() {
     objects.emplace_back(std::make_unique<TriangleObject>(green, leftA, leftC, leftB));
     objects.emplace_back(std::make_unique<TriangleObject>(green, leftC, leftD, leftB));
 
-    // Right wall
+    // Right wall (flipped normals)
     Vector3df rightA{xMax, yMin, zNear}, rightB{xMax, yMax, zNear}, rightC{xMax, yMax, zFar},
         rightD{xMax, yMin, zFar};
-    objects.emplace_back(std::make_unique<TriangleObject>(red, rightA, rightD, rightB));
-    objects.emplace_back(std::make_unique<TriangleObject>(red, rightB, rightD, rightC));
+    objects.emplace_back(std::make_unique<TriangleObject>(red, rightA, rightB, rightD));
+    objects.emplace_back(std::make_unique<TriangleObject>(red, rightB, rightC, rightD));
 
-    // Top wall
+    // Top wall (flipped normals)
     Vector3df topA{xMin, yMax, zNear}, topB{xMax, yMax, zNear}, topC{xMin, yMax, zFar},
         topD{xMax, yMax, zFar};
-    objects.emplace_back(std::make_unique<TriangleObject>(wall, topA, topC, topB));
-    objects.emplace_back(std::make_unique<TriangleObject>(wall, topC, topD, topB));
+    objects.emplace_back(std::make_unique<TriangleObject>(wall, topA, topB, topC));
+    objects.emplace_back(std::make_unique<TriangleObject>(wall, topB, topD, topC));
 
     // Bottom wall
     Vector3df bottomA{xMin, yMin, zNear}, bottomB{xMax, yMin, zNear}, bottomC{xMin, yMin, zFar},
@@ -48,11 +48,11 @@ std::vector<std::unique_ptr<Hittable>> createScene() {
 
     // Sphere
     objects.emplace_back(
-        std::make_unique<SphereObject>(white, Vector3df{-0.1f, -0.5f, -8.0f}, 0.3f));
+        std::make_unique<SphereObject>(white, Vector3df{-0.1f, -0.5f, -15.0f}, 0.3f));
 
     // Sphere
     objects.emplace_back(
-        std::make_unique<SphereObject>(green, Vector3df{0.1f, 1.0f, -10.0f}, 0.3f));
+        std::make_unique<SphereObject>(green, Vector3df{0.3f, 0.0f, -15.0f}, 0.3f));
 
     return objects;
 }
@@ -75,5 +75,20 @@ findNearestObject(const Ray3df& ray, const std::vector<std::unique_ptr<Hittable>
     if (closest)
         return finalInfo;
     return std::nullopt;
+}
+
+std::vector<Light> findLightSources(const HitInfo&                          info,
+                                    std::vector<std::unique_ptr<Hittable>>& scene) {
+    std::vector<Light> lightSources{};
+    for (const auto& light : LIGHTS) {
+        Ray3df shadowRay{info.hitPoint, light.position - info.hitPoint};
+        shadowRay.direction.normalize();
+        auto shadowHit = findNearestObject(shadowRay, scene);
+
+        if (!shadowHit.has_value()) {
+            lightSources.push_back(light);
+        }
+    }
+    return lightSources;
 }
 }  // namespace rt
