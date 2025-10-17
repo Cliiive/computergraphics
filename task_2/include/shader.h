@@ -2,8 +2,11 @@
 
 #include <SDL2/SDL.h>
 #include "math.h"
+#include <vector>
 
 namespace rt {
+struct Light;
+struct HitInfo;
 class Material {
   public:
     Vector3df ambient{0.1f, 0.1f, 0.1f};
@@ -18,6 +21,7 @@ class Material {
     }
 };
 
+const Vector3df lambertian(std::vector<Light> lights, const HitInfo& info);
 // Color conversion function
 const Uint32 vecToPixel(const Vector3df& c);
 }  // namespace rt

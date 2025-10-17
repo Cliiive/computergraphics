@@ -84,11 +84,11 @@ int main(void) {
             auto pos = win::WindowPos{.x = i, .y = j};
             //std::cout << pos.x << ", " << pos.y << std::endl;
 
-            auto   object = findNearestObject(ray, sceneWorld);
-            Uint32 color  = 0;
+            auto   hitInfo = findNearestObject(ray, sceneWorld);
+            Uint32 color   = 100;
 
-            if (object.has_value()) {
-                color = vecToPixel(object.value()->material().diffuse);
+            if (hitInfo.has_value()) {
+                color = vecToPixel(lambertian(lights, hitInfo.value()));
             }
 
             win::setPixelColor(window, pos, color);

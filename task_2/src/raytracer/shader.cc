@@ -1,6 +1,7 @@
 #include "shader.h"
 #include "hittable.h"
 #include "light.h"
+#include <iostream>
 #include <vector>
 namespace rt {
 
@@ -24,6 +25,7 @@ const Uint32 vecToPixel(const Vector3df& c) {
 const Vector3df lambertian(std::vector<Light> lights, const HitInfo& info) {
     // If we didn't hit anything, return black
     if (!info.hit) {
+        std::cout << "didnt git anything" << std::endl;
         return Vector3df{0.0f, 0.0f, 0.0f};
     }
 
@@ -51,4 +53,4 @@ const Vector3df lambertian(std::vector<Light> lights, const HitInfo& info) {
 
     return result;
 }
-}  // namespace rt::shader
+}  // namespace rt

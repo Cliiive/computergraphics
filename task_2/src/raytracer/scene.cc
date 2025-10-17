@@ -1,7 +1,7 @@
 #include "scene.h"
 #include "light.h"
 #include "geometric_object.h"
-
+#include <memory>
 namespace rt {
 std::vector<std::unique_ptr<Hittable>> createScene() {
     std::vector<std::unique_ptr<Hittable>> objects;
@@ -19,57 +19,61 @@ std::vector<std::unique_ptr<Hittable>> createScene() {
     // Left wall
     Vector3df leftA{xMin, yMin, zNear}, leftB{xMin, yMax, zNear}, leftC{xMin, yMin, zFar},
         leftD{xMin, yMax, zFar};
-    objects.emplace_back(std::make_unique<TriangleObject>(green, leftA, leftB, leftC));
-    objects.emplace_back(std::make_unique<TriangleObject>(green, leftC, leftB, leftD));
+    objects.emplace_back(std::make_unique<TriangleObject>(green, leftA, leftC, leftB));
+    objects.emplace_back(std::make_unique<TriangleObject>(green, leftC, leftD, leftB));
 
     // Right wall
     Vector3df rightA{xMax, yMin, zNear}, rightB{xMax, yMax, zNear}, rightC{xMax, yMax, zFar},
         rightD{xMax, yMin, zFar};
-    objects.emplace_back(std::make_unique<TriangleObject>(red, rightA, rightB, rightD));
-    objects.emplace_back(std::make_unique<TriangleObject>(red, rightB, rightC, rightD));
+    objects.emplace_back(std::make_unique<TriangleObject>(red, rightA, rightD, rightB));
+    objects.emplace_back(std::make_unique<TriangleObject>(red, rightB, rightD, rightC));
 
     // Top wall
     Vector3df topA{xMin, yMax, zNear}, topB{xMax, yMax, zNear}, topC{xMin, yMax, zFar},
         topD{xMax, yMax, zFar};
-    objects.emplace_back(std::make_unique<TriangleObject>(wall, topA, topB, topC));
-    objects.emplace_back(std::make_unique<TriangleObject>(wall, topC, topB, topD));
+    objects.emplace_back(std::make_unique<TriangleObject>(wall, topA, topC, topB));
+    objects.emplace_back(std::make_unique<TriangleObject>(wall, topC, topD, topB));
 
     // Bottom wall
     Vector3df bottomA{xMin, yMin, zNear}, bottomB{xMax, yMin, zNear}, bottomC{xMin, yMin, zFar},
         bottomD{xMax, yMin, zFar};
-    objects.emplace_back(std::make_unique<TriangleObject>(wall, bottomA, bottomB, bottomC));
-    objects.emplace_back(std::make_unique<TriangleObject>(wall, bottomC, bottomB, bottomD));
+    objects.emplace_back(std::make_unique<TriangleObject>(wall, bottomA, bottomC, bottomB));
+    objects.emplace_back(std::make_unique<TriangleObject>(wall, bottomC, bottomD, bottomB));
 
     // Back wall
     Vector3df backA{xMin, yMax, zFar}, backB{xMax, yMax, zFar}, backC{xMin, yMin, zFar},
         backD{xMax, yMin, zFar};
-    objects.emplace_back(std::make_unique<TriangleObject>(wall, backA, backB, backC));
-    objects.emplace_back(std::make_unique<TriangleObject>(wall, backC, backB, backD));
+    objects.emplace_back(std::make_unique<TriangleObject>(wall, backA, backC, backB));
+    objects.emplace_back(std::make_unique<TriangleObject>(wall, backC, backD, backB));
 
     // Sphere
     objects.emplace_back(
         std::make_unique<SphereObject>(white, Vector3df{-0.1f, -0.5f, -8.0f}, 0.3f));
 
+    // Sphere
+    objects.emplace_back(
+        std::make_unique<SphereObject>(green, Vector3df{0.1f, 1.0f, -10.0f}, 0.3f));
+
     return objects;
 }
 
-const std::vector<Light> lights = {
-    Light{Vector3df{1.0f, 1.0f, 1.0f}, Vector3df{1.0f, 1.0f, 1.0f}, 1.0}};
-
-std::optional<const Hittable*>
+std::optional<const HitInfo>
 findNearestObject(const Ray3df& ray, const std::vector<std::unique_ptr<Hittable>>& scene) {
     const Hittable* closest = nullptr;
-    float           minT    = std::numeric_limits<float>::infinity();
+    HitInfo         finalInfo{};
+    float           minT = std::numeric_limits<float>::infinity();
 
     for (const auto& obj : scene) {
         HitInfo info = obj->intersect(ray);
         if (info.hit && info.tHit > 0 && info.tHit < minT) {
-            minT    = info.tHit;
-            closest = obj.get();
+            finalInfo = info;
+            minT      = info.tHit;
+            closest   = obj.get();
         }
     }
+
     if (closest)
-        return closest;
+        return finalInfo;
     return std::nullopt;
 }
 }  // namespace rt
