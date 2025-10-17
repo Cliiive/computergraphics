@@ -80,10 +80,11 @@ findNearestObject(const Ray3df& ray, const std::vector<std::unique_ptr<Hittable>
 std::vector<Light> findLightSources(const HitInfo&                          info,
                                     std::vector<std::unique_ptr<Hittable>>& scene) {
     std::vector<Light> lightSources{};
+    float              epsilon = 0.001f;
     for (const auto& light : LIGHTS) {
-        Ray3df shadowRay{info.hitPoint, light.position - info.hitPoint};
-        shadowRay.direction.normalize();
-        auto shadowHit = findNearestObject(shadowRay, scene);
+        Vector3df origin = info.hitPoint + epsilon * info.normal;
+        Ray3df    shadowRay{origin, light.position - origin};
+        auto      shadowHit = findNearestObject(shadowRay, scene);
 
         if (!shadowHit.has_value()) {
             lightSources.push_back(light);

@@ -101,7 +101,7 @@ int main(void) {
     //   Sehstrahl für x,y mit Kamera erzeugen
     //   Farbe mit raytracing-Methode bestimmen
     //   Beim Bildschirm die Farbe für Pixel x,y, setzten
-    std::cout << "PROGRAMM FINISHED" << std::endl;
+    std::cout << "RENDERING FINISHED" << std::endl;
     win::waitForExit();
     return 0;
 }
