@@ -48,11 +48,11 @@ std::vector<std::unique_ptr<Hittable>> createScene() {
 
     // Sphere
     objects.emplace_back(
-        std::make_unique<SphereObject>(white, Vector3df{-0.1f, -0.5f, -15.0f}, 0.3f));
+        std::make_unique<SphereObject>(white, Vector3df{-0.4f, -0.5f, -12.0f}, 0.3f));
 
     // Sphere
     objects.emplace_back(
-        std::make_unique<SphereObject>(green, Vector3df{0.3f, 0.0f, -15.0f}, 0.3f));
+        std::make_unique<SphereObject>(green, Vector3df{0.3f, -0.2f, -12.0f}, 0.3f));
 
     return objects;
 }

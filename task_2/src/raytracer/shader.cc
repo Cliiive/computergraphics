@@ -43,7 +43,7 @@ const Vector3df lambertian(std::vector<Light> lights, const HitInfo& info) {
         result            = result + diffuse;
     }
 
-    result += (0.5f * info.material->diffuse);
+    result += (0.65f * info.material->diffuse);
 
     // Ensure values are in valid range
     for (int i = 0; i < 3; i++) {
